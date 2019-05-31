@@ -1,22 +1,36 @@
 <template>
   <div>
-    {{ $route.params.id }}
-    <br />
+    {{ $route.params.id }} <br />
+    video URL: {{ this.videoResp }} <br />
+
+    <div v-if="loading" class="loading">
+      Loading...
+    </div>
+
     <div class="video-wrapper">
       <video
+        v-if="videoResp"
+        autoplay
+        controls
+        width="auto"
+        height="auto"
+        :src="this.videoResp.videoURL"
+      ></video>
+
+      <!--<video
         autoplay
         controls
         width="auto"
         height="auto"
         :src="require(`../assets/videos/${$route.params.id}`)"
-      ></video>
+      ></video>-->
       <!-- static link to video -->
       <!-- https://omar-dev.ossim.io/video/MISP-_42FB6D65_21FEB03000019071saMISP-_HD000999.mp4 -->
       <div class="controls">
         <v-layout row wrap align-center>
           <v-flex xs12 sm12>
             <div class="text-xs-center">
-              <v-btn color="success" dark>
+              <v-btn color="success" disable>
                 Screenshot
                 <v-icon class="ml-2">fa-camera</v-icon>
               </v-btn>
@@ -26,12 +40,12 @@
                 <v-icon class="ml-2">fa-download</v-icon>
               </v-btn>
 
-              <v-btn color="green">
+              <v-btn color="success" disable>
                 Share
                 <v-icon class="ml-2" color="white">fa-share-alt</v-icon>
               </v-btn>
 
-              <v-btn color="green">
+              <v-btn color="success" disable>
                 Favorite
                 <v-icon class="ml-2" color="white">fa-star</v-icon>
               </v-btn>
@@ -54,7 +68,6 @@
 
 <script>
   import axios from "axios";
-  // import Modal from '@/components/Modal';
 
   export default {
     name: 'videoplayer',
@@ -62,45 +75,47 @@
     components: { },
     data() {
       return {
-        videoUrl: null
-        // videos: [{ name: "vid1.mp4" }, { name: "vid2.mp4" }, { name: "vid3.mp4" }]
+        loading: false,
+        error: null,
+        videoUrl: null,
+        videoResp: null,
       };
     },
     created() {
-      // this.pullVideos();
+      this.fetchData();
     },
     destroyed() {},
     mounted() {},
     computed: {},
     watch: {
-      $route(to, from) {
-        console.log("to", to, this.videoName);
-        this.videoUrl = "../assets/videos/" + to.params.id;
-      }
+      // call again the method if the route changes
+      '$route': 'fetchData'
+      // $route(to, from) {
+      //   console.log("to", to, this.videoName);
+      //   this.videoUrl = "../assets/videos/" + to.params.id;
+      // }
     },
     methods: {
-      pullVideos: function() {
-        console.log("pulling videos");
-        const videoData = axios.create({
-          // headers: {
-          //   'Content-type': 'application/geo+json',
-          //   'Accept': 'application/geo+json',
-          //   'Access-Control-Allow-Origin': '*',
-          //   'UserAgent': 'Project Bluefire',
-          //   'Access-Control-Request-Headers': 'Content-Type',
-          // },
-          baseURL: "https://omar-dev.ossim.io/omar-stager/",
-          params: {
-            // status: 'actual',
-            // area: 'PA'
-          }
-        });
+      fetchData: function() {
+        // needed because of axios scope
+        let self = this;
 
-        const videoUrl =
-          "https://omar-dev.ossim.io/omar-stager/videoStreaming?id=2";
-        axios.post(videoUrl).then(res => {
-          console.log("res", res);
-        });
+        // this.error = this.videoResp = null
+        this.loading = true
+
+        const param = this.$route.params.id
+        const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param ;
+
+        axios.post(apiUrl)
+          .then(res => {
+            this.loading = false
+            self.videoResp = res.data
+            this.$emit.videoMetaData = res.data
+            console.log('res.data', res.data)
+          })
+          .catch(error => {
+              console.log(error);
+          })
       }
     }
   };

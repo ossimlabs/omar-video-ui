@@ -14,8 +14,18 @@
           </v-list-tile-content>
         </v-list-tile>
 
+        <!-- META DATA -->
         <v-subheader class="mt-3 grey--text text--darken-1">
-          Recently Viewed Videos
+          Meta Data
+        </v-subheader>
+
+        <v-list v-model="videoMetaData">
+          {{ this.videoMetaData }}
+        </v-list>
+
+
+        <!--<v-subheader class="mt-3 grey&#45;&#45;text text&#45;&#45;darken-1">
+          Demo/Test Videos
         </v-subheader>
         <v-list>
           <v-list-tile
@@ -23,12 +33,6 @@
             v-for="video in videos"
             :key="video.name"
             avatar
-            @click="
-              $router.push({
-                name: 'videoplayer',
-                params: { id: video.name }
-              })
-            "
           >
             <v-list-tile-avatar class="mr-3">
               <video
@@ -41,33 +45,10 @@
 
             <v-list-tile-title
               v-text="video.name"
-              class="green--text"
+              class="green&#45;&#45;text"
             ></v-list-tile-title>
           </v-list-tile>
-        </v-list>
-
-        <v-subheader class="mt-3 grey--text text--darken-1">
-          Recently Viewed Images
-        </v-subheader>
-        <v-list>
-          <v-list-tile
-            v-for="thumbnail in thumbnails"
-            :key="thumbnail.text"
-            avatar
-            @click=""
-          >
-            <v-list-tile-avatar>
-              <img
-                :src="
-                  `https://source.unsplash.com/user/${
-                    thumbnail.username
-                  }/1600x900`
-                "
-              />
-            </v-list-tile-avatar>
-            <v-list-tile-title v-text="thumbnail.text"></v-list-tile-title>
-          </v-list-tile>
-        </v-list>
+        </v-list>-->
       </v-list>
     </v-navigation-drawer>
 
