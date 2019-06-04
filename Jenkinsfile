@@ -37,7 +37,10 @@ node( "${ BUILD_NODE }" ) {
     }
 
     stage ( "Assemble" ) {
-        sh "gradle server:assemble -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+        sh """
+            cd server
+            gradle assemble -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }
+        """
         //archiveArtifacts "apps/*/build/libs/*.jar"
     }
 
