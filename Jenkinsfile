@@ -38,6 +38,7 @@ node( "${ BUILD_NODE }" ) {
 
     stage ( "Assemble" ) {
         sh """
+            echo ${ rootProject.projectDir }
             cd server
             gradle assemble -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }
         """
