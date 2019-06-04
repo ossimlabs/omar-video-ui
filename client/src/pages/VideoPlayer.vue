@@ -1,36 +1,28 @@
 <template>
   <div>
-    {{ $route.params.id }} <br />
-    video URL: {{ this.videoResp }} <br />
 
-    <div v-if="loading" class="loading">
-      Loading...
-    </div>
 
-    <div class="video-wrapper">
+    <v-alert
+      :value="!this.videoMetaData.videoURL"
+      type="error"
+    >
+      <h3>Video Not Found</h3>
+      <span> video URL: {{ this.videoMetaData.videoURL }} </span>
+    </v-alert>
+
+    <div class="video-wrapper" v-if="this.videoMetaData.videoURL">
       <video
-        v-if="videoResp"
         autoplay
         controls
         width="auto"
         height="auto"
-        :src="this.videoResp.videoURL"
+        :src="this.videoMetaData.videoURL"
       ></video>
-
-      <!--<video
-        autoplay
-        controls
-        width="auto"
-        height="auto"
-        :src="require(`../assets/videos/${$route.params.id}`)"
-      ></video>-->
-      <!-- static link to video -->
-      <!-- https://omar-dev.ossim.io/video/MISP-_42FB6D65_21FEB03000019071saMISP-_HD000999.mp4 -->
       <div class="controls">
         <v-layout row wrap align-center>
           <v-flex xs12 sm12>
             <div class="text-xs-center">
-              <v-btn color="success" disable>
+              <v-btn color="success" disabled>
                 Screenshot
                 <v-icon class="ml-2">fa-camera</v-icon>
               </v-btn>
@@ -40,12 +32,12 @@
                 <v-icon class="ml-2">fa-download</v-icon>
               </v-btn>
 
-              <v-btn color="success" disable>
+              <v-btn color="success" disabled>
                 Share
                 <v-icon class="ml-2" color="white">fa-share-alt</v-icon>
               </v-btn>
 
-              <v-btn color="success" disable>
+              <v-btn color="success" disabled>
                 Favorite
                 <v-icon class="ml-2" color="white">fa-star</v-icon>
               </v-btn>
@@ -71,30 +63,18 @@
 
   export default {
     name: 'videoplayer',
-    props: {},
+    props: {
+      videoMetaData: Object
+    },
     components: { },
     data() {
-      return {
-        loading: false,
-        error: null,
-        videoUrl: null,
-        videoResp: null,
-      };
+      return {};
     },
-    created() {
-      this.fetchData();
-    },
+    created() {},
     destroyed() {},
     mounted() {},
     computed: {},
-    watch: {
-      // call again the method if the route changes
-      '$route': 'fetchData'
-      // $route(to, from) {
-      //   console.log("to", to, this.videoName);
-      //   this.videoUrl = "../assets/videos/" + to.params.id;
-      // }
-    },
+    watch: {},
     methods: {
       fetchData: function() {
         // needed because of axios scope

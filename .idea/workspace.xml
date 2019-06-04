@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="500bf1a6-8b25-435c-bc18-e22f1c84495c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/pages/VideoPlayer.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/VideoPlayer.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/router/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,16 +24,17 @@
   <component name="FileEditorManager">
     <splitter split-orientation="vertical" split-proportion="0.65056604">
       <split-first>
-        <splitter split-orientation="horizontal" split-proportion="0.44648942">
+        <splitter split-orientation="horizontal" split-proportion="0.7764953">
           <split-first>
             <leaf>
               <file pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/client/src/App.vue">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="540">
-                      <caret line="60" column="20" lean-forward="true" selection-start-line="60" selection-start-column="20" selection-end-line="60" selection-end-column="20" />
+                    <state relative-caret-position="451">
+                      <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
                       <folding>
                         <element signature="e#735#1480#0" />
+                        <element signature="e#2497#2523#0" expanded="true" />
                       </folding>
                     </state>
                   </provider>
@@ -43,23 +44,11 @@
           </split-first>
           <split-second>
             <leaf>
-              <file pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/client/src/App.vue">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="1005">
-                      <caret line="77" selection-start-line="77" selection-end-line="77" />
-                    </state>
-                  </provider>
-                </entry>
-              </file>
               <file pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/client/src/pages/VideoPlayer.vue">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="547">
-                      <caret line="102" column="45" lean-forward="true" selection-start-line="102" selection-start-column="45" selection-end-line="102" selection-end-column="45" />
-                      <folding>
-                        <element signature="n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" />
-                      </folding>
+                    <state relative-caret-position="360">
+                      <caret line="24" column="45" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="45" />
                     </state>
                   </provider>
                 </entry>
@@ -82,11 +71,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/client/src/router/index.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="270">
-                  <caret line="18" column="23" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
-                  <folding>
-                    <element signature="e#0#21#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="45">
+                  <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="46" />
                 </state>
               </provider>
             </entry>
@@ -142,10 +128,10 @@
     <auto-save>true</auto-save>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2559" />
-    <option name="y" value="923" />
-    <option name="width" value="1634" />
-    <option name="height" value="1417" />
+    <option name="x" value="-4480" />
+    <option name="y" value="-516" />
+    <option name="width" value="1554" />
+    <option name="height" value="1344" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -164,47 +150,7 @@
             <path>
               <item name="omar-video-vrails" type="b2602c69:ProjectViewProjectNode" />
               <item name="omar-video-vrails" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="omar-video-vrails" type="b2602c69:ProjectViewProjectNode" />
-              <item name="omar-video-vrails" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="omar-video-vrails" type="b2602c69:ProjectViewProjectNode" />
-              <item name="omar-video-vrails" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="omar-video-vrails" type="b2602c69:ProjectViewProjectNode" />
-              <item name="omar-video-vrails" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="omar-video-vrails" type="b2602c69:ProjectViewProjectNode" />
-              <item name="omar-video-vrails" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="omar-video-vrails" type="b2602c69:ProjectViewProjectNode" />
-              <item name="omar-video-vrails" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="pages" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="omar-video-vrails" type="b2602c69:ProjectViewProjectNode" />
-              <item name="omar-video-vrails" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="router" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -255,23 +201,22 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1559066887020</updated>
-      <workItem from="1559066890100" duration="31109000" />
+      <workItem from="1559066890100" duration="40029000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31109000" />
+    <option name="totallyTimeSpent" value="40029000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2559" y="923" width="1634" height="1417" extended-state="0" />
-    <editor active="true" />
+    <frame x="-4380" y="-479" width="1554" height="1344" extended-state="0" />
     <layout>
       <window_info id="Designer" />
       <window_info id="Image Layers" />
       <window_info id="Capture Tool" />
       <window_info id="UI Designer" />
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16268845" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1712963" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Build" weight="0.32981133" />
       <window_info anchor="bottom" id="Terminal" />
@@ -401,30 +346,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/router/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="23" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="46" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/pages/VideoPlayer.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="102" column="45" lean-forward="true" selection-start-line="102" selection-start-column="45" selection-end-line="102" selection-end-column="45" />
-          <folding>
-            <element signature="n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" />
-          </folding>
+        <state relative-caret-position="360">
+          <caret line="24" column="45" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="45" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/App.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="60" column="20" lean-forward="true" selection-start-line="60" selection-start-column="20" selection-end-line="60" selection-end-column="20" />
+        <state relative-caret-position="451">
+          <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
           <folding>
             <element signature="e#735#1480#0" />
+            <element signature="e#2497#2523#0" expanded="true" />
           </folding>
         </state>
       </provider>

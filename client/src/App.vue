@@ -1,27 +1,61 @@
 <template>
   <v-app id="inspire" dark>
     <!-- DRAWER -->
-    <v-navigation-drawer v-model="drawer" fixed clipped app>
-      <v-list dense class="pt-3">
-        <v-list-tile v-for="button in buttons" :key="button.text" @click="">
+    <v-navigation-drawer v-model="drawer" fixed clipped app >
+      <v-container >
+        <v-layout>
+          <v-flex xs12>
+            <v-btn
+              block
+              disabled
+              color="transparent"
+              v-for="button in buttons"
+              :key="button.text"
+              @click=""
+            >
+              <v-icon class="mr-2">{{ button.icon }} </v-icon> {{ button.text }}
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+
+
+
+      <v-list dense class="">
+        <!--<v-list-tile v-for="button in buttons" :key="button.text" @click="">
           <v-list-tile-action>
-            <v-icon>{{ button.icon }}</v-icon>
+            <v-icon disabled>{{ button.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>
+            <v-list-tile-title >
               {{ button.text }}
             </v-list-tile-title>
           </v-list-tile-content>
-        </v-list-tile>
+        </v-list-tile>-->
 
         <!-- META DATA -->
         <v-subheader class="mt-3 grey--text text--darken-1">
           Meta Data
         </v-subheader>
 
-        <v-list v-model="videoMetaData">
-          {{ this.videoMetaData }}
-        </v-list>
+        <!-- Will not work until videoDataSet is array -->
+        <!--<v-data-iterator
+          :items="videoResp.videoDataSet"
+          row
+          wrap
+        >
+        </v-data-iterator>-->
+
+        <v-list-tile ripple v-for="(entry, key) in videoResp.videoDataSet">
+          <v-list-tile-title>
+            {{ key }} :
+          </v-list-tile-title>
+
+          <v-list-tile-title class="green--text">
+          {{ entry }}
+          </v-list-tile-title>
+
+        </v-list-tile>
 
 
         <!--<v-subheader class="mt-3 grey&#45;&#45;text text&#45;&#45;darken-1">
@@ -57,9 +91,7 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <img
         src="./assets/images/o2-logo.png"
-        height="40px"
-        width="40px"
-        class="ml-1"
+        class="ml-1 logo"
         @click="$router.push('/')"
       />
 
@@ -74,7 +106,12 @@
       <v-container fill-height>
         <v-layout justify-center align-center>
           <v-flex shrink>
-            <router-view></router-view>
+            <video-player
+            :videoMetaData="videoMetaData"
+            >
+
+            </video-player>
+          <!-- <router-view></router-view>-->
           </v-flex>
         </v-layout>
       </v-container>
@@ -83,13 +120,19 @@
 </template>
 
 <script>
+  import axios from "axios";
+  import VideoPlayer from '@/pages/VideoPlayer';
+
   export default {
     name: "App",
-    components: {},
+    props: {},
+    components: {VideoPlayer},
     data() {
       return {
+        loading: false,
         drawer: null,
-        videoName: 'this is the videoName',
+        videoResp: null,
+        videoMetaData: {},
         videos: [
           { name: "vid1.mp4" },
           { name: "vid2.mp4" },
@@ -101,24 +144,42 @@
           { icon: "fa-save", text: "Saved" },
           { icon: "fa-share", text: "Shared" }
         ],
-        thumbnails: [
-          {
-            username: "erondu",
-            text: "Video about a thing following a thing and then more things."
-          },
-          { username: "jeremybishop", text: "Some goats." },
-          {
-            username: "turner_imagery",
-            text: "Not so grainy video but mostly not good."
-          },
-          { username: "eberhardgross", text: "Best memes of 2019" },
-          { username: "00_shots", text: "Top 10 reason why Vue.js beats React!" }
-        ]
       };
     },
-    props: {
-      source: String
+    created() {
+      this.fetchData();
+    },
+    destroyed() {},
+    mounted() {},
+    computed: {},
+    watch: {},
+    methods: {
+      fetchData: function() {
+        // needed because of axios scope
+        let self = this;
+
+        // this.error = this.videoResp = null
+        this.loading = true;
+
+        const param = this.$route.params.id;
+        console.log('param', param)
+        const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param ;
+
+        axios.post(apiUrl)
+          .then(res => {
+            this.loading = false
+            self.videoResp = this.videoMetaData = res.data
+            console.log('this.videoMetaData', this.videoMetaData)
+          })
+          .catch(error => {
+            console.log('Error', error);
+          })
+          .finally(function () {
+
+          })
+      }
     }
+
   };
 </script>
 
@@ -141,5 +202,9 @@
 
   #nav a.router-link-exact-active {
     color: #42b983;
+  }
+  .logo {
+    width: 40px;
+    height: 40px;
   }
 </style>
