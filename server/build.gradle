@@ -8,6 +8,7 @@ buildscript {
         classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
         classpath "org.grails.plugins:views-gradle:1.1.6"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.8"
         classpath 'com.bmuschko:gradle-docker-plugin:3.0.12'
         classpath 'io.ossim:gradleDefaults:1.7-SNAPSHOT'
     }
@@ -16,6 +17,7 @@ buildscript {
 apply plugin:"eclipse"
 apply plugin:"idea"
 apply plugin:"org.grails.grails-web"
+apply plugin:"asset-pipeline"
 apply plugin:"com.moowork.node"
 apply plugin:"org.grails.plugins.views-json"
 
@@ -67,6 +69,7 @@ dependencies {
     runtime "org.glassfish.web:el-impl:2.1.2-b03"
     runtime "com.h2database:h2"
     runtime "org.apache.tomcat:tomcat-jdbc"
+    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.8"
     testCompile "org.grails:grails-gorm-testing-support"
     testCompile "org.grails:grails-datastore-rest-client"
     testCompile "org.grails:grails-web-testing-support"
