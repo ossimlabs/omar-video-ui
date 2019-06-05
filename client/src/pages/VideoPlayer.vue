@@ -1,7 +1,6 @@
 <template>
   <div>
 
-
     <v-alert
       :value="!this.videoMetaData.videoURL"
       type="error"
@@ -59,46 +58,46 @@
 </template>
 
 <script>
-  import axios from "axios";
+import axios from 'axios'
 
-  export default {
-    name: 'videoplayer',
-    props: {
-      videoMetaData: Object
-    },
-    components: { },
-    data() {
-      return {};
-    },
-    created() {},
-    destroyed() {},
-    mounted() {},
-    computed: {},
-    watch: {},
-    methods: {
-      fetchData: function() {
-        // needed because of axios scope
-        let self = this;
+export default {
+  name: 'videoplayer',
+  props: {
+    videoMetaData: Object
+  },
+  components: { },
+  data () {
+    return {}
+  },
+  created () {},
+  destroyed () {},
+  mounted () {},
+  computed: {},
+  watch: {},
+  methods: {
+    fetchData: function () {
+      // needed because of axios scope
+      let self = this
 
-        // this.error = this.videoResp = null
-        this.loading = true
+      // this.error = this.videoResp = null
+      this.loading = true
 
-        const param = this.$route.params.id
-        const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param ;
+      const param = this.$route.params.id
+      const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param
 
-        axios.post(apiUrl)
-          .then(res => {
-            this.loading = false
-            self.videoResp = res.data
-            this.$emit.videoMetaData = res.data
-            console.log('res.data', res.data)
-          })
-          .catch(error => {
-              console.log(error);
-          })
-      }
+      axios.post(apiUrl)
+        .then(res => {
+          this.loading = false
+          self.videoResp = res.data
+          this.$emit.videoMetaData = res.data
+          console.log('res.data', res.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
-  };
+  }
+}
 </script>
 
 <style scoped></style>

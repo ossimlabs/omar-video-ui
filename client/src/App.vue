@@ -11,15 +11,12 @@
               color="transparent"
               v-for="button in buttons"
               :key="button.text"
-              @click=""
             >
               <v-icon class="mr-2">{{ button.icon }} </v-icon> {{ button.text }}
             </v-btn>
           </v-flex>
         </v-layout>
       </v-container>
-
-
 
       <v-list dense class="" >
         <!--<v-list-tile v-for="button in buttons" :key="button.text" @click="">
@@ -46,7 +43,7 @@
         >
         </v-data-iterator>-->
 
-        <v-list-tile ripple v-for="(entry, key) in videoResp.videoDataSet">
+        <v-list-tile ripple v-for="(entry, key) in videoResp.videoDataSet" :key="key">
           <v-list-tile-title>
             {{ key }} :
           </v-list-tile-title>
@@ -56,7 +53,6 @@
           </v-list-tile-title>
 
         </v-list-tile>
-
 
         <!--<v-subheader class="mt-3 grey&#45;&#45;text text&#45;&#45;darken-1">
           Demo/Test Videos
@@ -120,50 +116,50 @@
 </template>
 
 <script>
-import axios from "axios";
-import VideoPlayer from '@/pages/VideoPlayer';
+import axios from 'axios'
+import VideoPlayer from '@/pages/VideoPlayer'
 
 export default {
-  name: "App",
+  name: 'App',
   props: {},
   components: {VideoPlayer},
-  data() {
+  data () {
     return {
       loading: false,
       drawer: null,
       videoResp: {},
       videoMetaData: {},
       videos: [
-        { name: "vid1.mp4" },
-        { name: "vid2.mp4" },
-        { name: "vid3.mp4" }
+        { name: 'vid1.mp4' },
+        { name: 'vid2.mp4' },
+        { name: 'vid3.mp4' }
       ],
       buttons: [
-        { icon: "fa-fire", text: "Most Popular" },
-        { icon: "fa-history", text: "History" },
-        { icon: "fa-save", text: "Saved" },
-        { icon: "fa-share", text: "Shared" }
-      ],
-    };
+        { icon: 'fa-fire', text: 'Most Popular' },
+        { icon: 'fa-history', text: 'History' },
+        { icon: 'fa-save', text: 'Saved' },
+        { icon: 'fa-share', text: 'Shared' }
+      ]
+    }
   },
-  created() {
-    this.fetchData();
+  created () {
+    this.fetchData()
   },
-  destroyed() {},
-  mounted() {},
+  destroyed () {},
+  mounted () {},
   computed: {},
   watch: {},
   methods: {
-    fetchData: function() {
+    fetchData: function () {
       // needed because of axios scope
-      let self = this;
+      let self = this
 
       // this.error = this.videoResp = null
-      this.loading = true;
+      this.loading = true
 
-      const param = this.$route.params.id;
+      const param = this.$route.params.id
       console.log('param', param)
-      const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param ;
+      const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param
 
       axios.post(apiUrl)
         .then(res => {
@@ -172,7 +168,7 @@ export default {
           console.log('this.videoMetaData', this.videoMetaData)
         })
         .catch(error => {
-          console.log('Error', error);
+          console.log('Error', error)
         })
         .finally(function () {
 
@@ -180,7 +176,7 @@ export default {
     }
   }
 
-};
+}
 </script>
 
 <style>
