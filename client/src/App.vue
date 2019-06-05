@@ -21,7 +21,7 @@
 
 
 
-      <v-list dense class="">
+      <v-list dense class="" >
         <!--<v-list-tile v-for="button in buttons" :key="button.text" @click="">
           <v-list-tile-action>
             <v-icon disabled>{{ button.icon }}</v-icon>
@@ -120,67 +120,67 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import VideoPlayer from '@/pages/VideoPlayer';
+import axios from "axios";
+import VideoPlayer from '@/pages/VideoPlayer';
 
-  export default {
-    name: "App",
-    props: {},
-    components: {VideoPlayer},
-    data() {
-      return {
-        loading: false,
-        drawer: null,
-        videoResp: null,
-        videoMetaData: {},
-        videos: [
-          { name: "vid1.mp4" },
-          { name: "vid2.mp4" },
-          { name: "vid3.mp4" }
-        ],
-        buttons: [
-          { icon: "fa-fire", text: "Most Popular" },
-          { icon: "fa-history", text: "History" },
-          { icon: "fa-save", text: "Saved" },
-          { icon: "fa-share", text: "Shared" }
-        ],
-      };
-    },
-    created() {
-      this.fetchData();
-    },
-    destroyed() {},
-    mounted() {},
-    computed: {},
-    watch: {},
-    methods: {
-      fetchData: function() {
-        // needed because of axios scope
-        let self = this;
+export default {
+  name: "App",
+  props: {},
+  components: {VideoPlayer},
+  data() {
+    return {
+      loading: false,
+      drawer: null,
+      videoResp: {},
+      videoMetaData: {},
+      videos: [
+        { name: "vid1.mp4" },
+        { name: "vid2.mp4" },
+        { name: "vid3.mp4" }
+      ],
+      buttons: [
+        { icon: "fa-fire", text: "Most Popular" },
+        { icon: "fa-history", text: "History" },
+        { icon: "fa-save", text: "Saved" },
+        { icon: "fa-share", text: "Shared" }
+      ],
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  destroyed() {},
+  mounted() {},
+  computed: {},
+  watch: {},
+  methods: {
+    fetchData: function() {
+      // needed because of axios scope
+      let self = this;
 
-        // this.error = this.videoResp = null
-        this.loading = true;
+      // this.error = this.videoResp = null
+      this.loading = true;
 
-        const param = this.$route.params.id;
-        console.log('param', param)
-        const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param ;
+      const param = this.$route.params.id;
+      console.log('param', param)
+      const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param ;
 
-        axios.post(apiUrl)
-          .then(res => {
-            this.loading = false
-            self.videoResp = this.videoMetaData = res.data
-            console.log('this.videoMetaData', this.videoMetaData)
-          })
-          .catch(error => {
-            console.log('Error', error);
-          })
-          .finally(function () {
+      axios.post(apiUrl)
+        .then(res => {
+          this.loading = false
+          self.videoResp = this.videoMetaData = res.data
+          console.log('this.videoMetaData', this.videoMetaData)
+        })
+        .catch(error => {
+          console.log('Error', error);
+        })
+        .finally(function () {
 
-          })
-      }
+        })
     }
+  }
 
-  };
+};
 </script>
 
 <style>
