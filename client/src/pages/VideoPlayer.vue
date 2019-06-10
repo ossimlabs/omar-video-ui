@@ -21,7 +21,7 @@
         <v-layout row wrap align-center>
           <v-flex xs12 sm12>
             <div class="text-xs-center">
-              <v-btn color="success" disabled>
+              <v-btn color="success" @click="takeScreenshot()">
                 Screenshot
                 <v-icon class="ml-2">fa-camera</v-icon>
               </v-btn>
@@ -53,12 +53,13 @@
       </div>
     </div>
 
-<!--    <Modal> </Modal>-->
+    <!--    <Modal> </Modal>-->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
 
 export default {
   name: 'videoplayer',
@@ -75,22 +76,18 @@ export default {
   computed: {},
   watch: {},
   methods: {
-    fetchData: function () {
+    takeScreenshot: function () {
       // needed because of axios scope
-      let self = this
 
-      // this.error = this.videoResp = null
-      this.loading = true
+      const params = {
+        timestamp: '00:00:13',
+        videoPath: 'http://localhost/videos/MISP-_42FB6DA1_21FEB03000019081saMISP-_HD000999.mp4'
+      }
+      const apiUrl = 'http://localhost:8081/omar-services/videoStreaming/takeScreenshot'
 
-      const param = this.$route.params.id
-      const apiUrl = 'http://localhost:8081/omar-services/videoStreaming?id=' + param
-
-      axios.post(apiUrl)
+      axios.post(apiUrl, qs.stringify(params))
         .then(res => {
-          this.loading = false
-          self.videoResp = res.data
-          this.$emit.videoMetaData = res.data
-          console.log('res.data', res.data)
+          console.log('res.data', res)
         })
         .catch(error => {
           console.log(error)
