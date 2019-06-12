@@ -160,7 +160,7 @@ export default {
       const param = this.$route.params.id
       console.log('param', param)
       const apiUrlProd = 'https://omar-dev.ossim.io/omar-services/videoStreaming?id=' + param
-      const apiUrl = 'https://omar-dev.ossim.io/omar-services/videoStreaming?id=' + param
+      const apiUrl = 'https://omar-dev.ossim.io/omar-stager/videoStreaming?id=' + param
 
       axios.post(apiUrlProd)
         .then(res => {

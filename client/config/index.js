@@ -50,7 +50,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/omar-video-vrails',
+    assetsPublicPath: '/omar-video-vrails/',
 
     /**
      * Source Maps
