@@ -37,7 +37,8 @@ node( "${ BUILD_NODE }" ) {
     }
 
     stage ( "Assemble" ) {
-        sh "gradle assembleServerAndCLient -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+        //sh "gradle assembleServerAndCLient -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+	sh "gradle assembleServerAndCLient -PossimMavenProxy=https://nexus-old.ossim.io/repository/all-repos"
         //archiveArtifacts "apps/*/build/libs/*.jar"
     }
 
