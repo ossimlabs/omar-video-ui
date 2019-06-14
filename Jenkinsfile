@@ -49,7 +49,8 @@ node( "${ BUILD_NODE }" ) {
             usernameVariable: 'DOCKER_REGISTRY_USERNAME'
         ]]) {
             // Run all tasks on the app. This includes pushing to OpenShift and S3.
-            sh "gradle pushDockerImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+            //sh "gradle pushDockerImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+            sh "gradle pushDockerImage -PossimMavenProxy=https://nexus-old.ossim.io/repository/all-repos"
         }
     }
     try {
