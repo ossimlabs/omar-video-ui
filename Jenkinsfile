@@ -63,7 +63,8 @@ node( "${ BUILD_NODE }" ) {
                 passwordVariable: 'OPENSHIFT_PASSWORD'
             ]]) {
                 // Run all tasks on the app. This includes pushing to OpenShift and S3.
-                sh "gradle openshiftTagImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+                //sh "gradle openshiftTagImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+                  sh "gradle openshiftTagImage -PossimMavenProxy=https://nexus-old.ossim.io/repository/all-repos"
             }
         }
 
