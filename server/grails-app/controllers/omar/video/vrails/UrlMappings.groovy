@@ -11,6 +11,11 @@ class UrlMappings {
         put "/$controller/$id(.$format)?"(action:"update")
         patch "/$controller/$id(.$format)?"(action:"patch")
 
+        '/proxy'( controller: 'application', action: 'proxy' )
+
+        '/screenshot/takeScreenshot'(controller: 'screenshot', action:'takeScreenshot', method:'POST')
+        '/screenshot/displayScreenshot'(controller: 'screenshot', action:'displayScreenshot')
+
         // Modified for VUE Front end in PROD
         if ( Environment.current == Environment.PRODUCTION ) {
             '/'(uri: '/index.html')

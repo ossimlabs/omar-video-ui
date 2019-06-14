@@ -1,4 +1,7 @@
 ---
+screenshot:
+    localScreenshotDir: /opt/local/www/apache2/html/screenshots
+---
 grails:
     profile: vue
     codegen:

@@ -18,7 +18,7 @@
         </v-layout>
       </v-container>
 
-      <v-list dense class="" >
+      <v-list dense v-if="videoMetaData" >
         <!--<v-list-tile v-for="button in buttons" :key="button.text" @click="">
           <v-list-tile-action>
             <v-icon disabled>{{ button.icon }}</v-icon>
@@ -43,7 +43,7 @@
         >
         </v-data-iterator>-->
 
-        <v-list-tile ripple v-for="(entry, key) in videoResp.videoDataSet" :key="key">
+        <v-list-tile ripple v-for="(entry, key) in videoMetaData.features[0].properties" :key="key">
           <v-list-tile-title>
             {{ key }} :
           </v-list-tile-title>
@@ -51,34 +51,7 @@
           <v-list-tile-title class="green--text">
           {{ entry }}
           </v-list-tile-title>
-
         </v-list-tile>
-
-        <!--<v-subheader class="mt-3 grey&#45;&#45;text text&#45;&#45;darken-1">
-          Demo/Test Videos
-        </v-subheader>
-        <v-list>
-          <v-list-tile
-            class="ma-4"
-            v-for="video in videos"
-            :key="video.name"
-            avatar
-          >
-            <v-list-tile-avatar class="mr-3">
-              <video
-                autoplay
-                width="85px"
-                height="85px"
-                :src="require(`./assets/videos/${video.name}`)"
-              ></video>
-            </v-list-tile-avatar>
-
-            <v-list-tile-title
-              v-text="video.name"
-              class="green&#45;&#45;text"
-            ></v-list-tile-title>
-          </v-list-tile>
-        </v-list>-->
       </v-list>
     </v-navigation-drawer>
 
@@ -103,7 +76,7 @@
         <v-layout justify-center align-center>
           <v-flex shrink>
             <video-player
-            :videoMetaData="videoMetaData"
+            :videoUrl="videoUrl"
             >
 
             </video-player>
@@ -118,6 +91,7 @@
 <script>
 import axios from 'axios'
 import VideoPlayer from '@/pages/VideoPlayer'
+import qs from 'qs'
 
 export default {
   name: 'App',
@@ -128,12 +102,8 @@ export default {
       loading: false,
       drawer: null,
       videoResp: {},
-      videoMetaData: {},
-      videos: [
-        { name: 'vid1.mp4' },
-        { name: 'vid2.mp4' },
-        { name: 'vid3.mp4' }
-      ],
+      videoMetaData: null,
+      videoUrl: null,
       buttons: [
         { icon: 'fa-fire', text: 'Most Popular' },
         { icon: 'fa-history', text: 'History' },
@@ -148,31 +118,54 @@ export default {
   destroyed () {},
   mounted () {},
   computed: {},
-  watch: {},
+  watch: {
+    '$route' (to, from) {
+      console.log('route changed')
+      // react to route changes...
+    }
+  },
   methods: {
     fetchData: function () {
       // needed because of axios scope
       let self = this
-
-      // this.error = this.videoResp = null
       this.loading = true
 
-      const param = this.$route.params.id
-      console.log('param', param)
-      const apiUrlProd = 'https://omar-dev.ossim.io/omar-services/videoStreaming?id=' + param
-      const apiUrl = 'https://omar-dev.ossim.io/omar-stager/videoStreaming?id=' + param
+      // grab the query parameters to assign the videoName
+      // Value used for http querystring to WFS
+      let urlParams = new URLSearchParams(window.location.search);
+      let videoName = urlParams.get('videoName');
 
-      axios.post(apiUrlProd)
+      // WFS Redirect
+      const proxy = 'http://localhost:8080/proxy'
+      const wfsUrl = 'https://omar-dev.ossim.io/omar-wfs/wfs?'
+      const wfsParams = {
+        service: 'WFS',
+        version: '1.1.0',
+        request: 'GetFeature',
+        typeName: 'omar:video_data_set',
+        filter: `filename like '%${videoName}%'`,
+        resultType: 'results',
+        outputFormat: 'JSON'
+      }
+
+      var url = wfsUrl + qs.stringify(wfsParams)
+
+      axios.get(url)
         .then(res => {
-          this.loading = false
+          // Strip everything away leaving filename
+          // Because regex is the devil and this is cleaner
+          // split divides url by /, pop returns last, replace modifies filetype
+          const videoNameMp4 = res.data.features[0].properties.filename.split('/').pop().replace(/mpg/i, 'mp4')
+
+          // Build final url and append to response keeping unified object intact
+          res.data.features[0].properties.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
+          this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
+
           self.videoResp = this.videoMetaData = res.data
           console.log('this.videoMetaData', this.videoMetaData)
         })
         .catch(error => {
-          console.log('Error', error)
-        })
-        .finally(function () {
-
+          console.log(error)
         })
     }
   }
