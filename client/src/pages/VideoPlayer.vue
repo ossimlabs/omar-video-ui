@@ -87,22 +87,24 @@ export default {
         videoPath: this.videoUrl
       }
 
-      // const apiUrlOld = 'http://localhost:8081/omar-services/videoStreaming/takeScreenshot'
       const apiUrl = 'http://localhost:8080/screenshot/takeScreenshot'
+
+      const fileUrl = 'http://localhost:8080/screenshot/displayScreenshot?filePath=/opt/local/www/apache2/html/screenshots/' +
+        videoParams.timestamp +
+        '.jpg&timestamp=' +
+        videoParams.timestamp
 
       axios.post(apiUrl, qs.stringify(videoParams))
         .then(res => {
           console.log('res.data', res)
           window.open(
-            'http://localhost:8080/screenshot/displayScreenshot?filePath=/opt/local/www/apache2/html/screenshots/00:00:17.jpg&timestamp=17',
+            fileUrl,
             'downloadWindow',
             strWindowFeatures)
         })
         .catch(error => {
           console.log(error)
         })
-
-      console.log('this.$refs.currentTime', this.$refs.video.currentTime)
     }
   }
 }
