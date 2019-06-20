@@ -37,8 +37,7 @@ node( "${ BUILD_NODE }" ) {
     }
 
     stage ( "Assemble" ) {
-        //sh "gradle assembleServerAndCLient -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
-	sh "gradle assembleServerAndCLient -PossimMavenProxy=https://nexus-old.ossim.io/repository/all-repos"
+        sh "gradle assembleServerAndCLient -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
         //archiveArtifacts "apps/*/build/libs/*.jar"
     }
 
@@ -50,8 +49,7 @@ node( "${ BUILD_NODE }" ) {
             usernameVariable: 'DOCKER_REGISTRY_USERNAME'
         ]]) {
             // Run all tasks on the app. This includes pushing to OpenShift and S3.
-            //sh "gradle pushDockerImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
-            sh "gradle pushDockerImage -PossimMavenProxy=https://nexus-old.ossim.io/repository/all-repos"
+            sh "gradle pushDockerImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
         }
     }
     try {
@@ -63,8 +61,7 @@ node( "${ BUILD_NODE }" ) {
                 passwordVariable: 'OPENSHIFT_PASSWORD'
             ]]) {
                 // Run all tasks on the app. This includes pushing to OpenShift and S3.
-                //sh "gradle openshiftTagImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
-                  sh "gradle openshiftTagImage -PossimMavenProxy=https://nexus-old.ossim.io/repository/all-repos"
+                sh "gradle openshiftTagImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
             }
         }
 
