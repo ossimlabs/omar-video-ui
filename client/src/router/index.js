@@ -9,7 +9,7 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '?videoname=:videoName',
+      path: '?filter=:filter',
       name: 'Welcome',
       component: Welcome,
       props: true
