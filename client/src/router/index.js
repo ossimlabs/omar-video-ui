@@ -9,17 +9,7 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '?videoname=:videoName',
-      name: 'Welcome',
-      component: Welcome,
-      props: true
-    },
-    {
-      path: '/videoPlayer/:id',
-      name: 'videoplayer',
-      component: VideoPlayer
-      // component: () =>
-      //  import(/* webpackChunkName: "about" */ "./pages/VideoPlayer.vue")
+      path: '?videoname=:videoName'
     }
   ]
 })

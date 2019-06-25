@@ -61,6 +61,7 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
+import FileSaver from 'file-saver'
 
 export default {
   name: 'videoplayer',
@@ -78,29 +79,17 @@ export default {
   watch: {},
   methods: {
     takeScreenshot: function () {
-      // Params for window.open placement
-      const strWindowFeatures = 'left=800,bottom=600,width=100,height=100,'
+      const apiUrl = 'http://localhost:8080/screenshot/takeScreenshot'
 
       const videoParams = {
-        name: 'screeny',
         timestamp: this.$refs.video.currentTime,
         videoPath: this.videoUrl
       }
-
-      const apiUrl = 'http://localhost:8080/screenshot/takeScreenshot'
-
-      const fileUrl = 'http://localhost:8080/screenshot/displayScreenshot?filePath=/opt/local/www/apache2/html/screenshots/' +
-        videoParams.timestamp +
-        '.jpg&timestamp=' +
-        videoParams.timestamp
-
-      axios.post(apiUrl, qs.stringify(videoParams))
+      axios.post(apiUrl, qs.stringify(videoParams), { responseType: 'blob' })
         .then(res => {
           console.log('res.data', res)
-          window.open(
-            fileUrl,
-            'downloadWindow',
-            strWindowFeatures)
+          FileSaver.saveAs(res.data, 'screenshot-timestamp_' + this.$refs.video.currentTime + '_.jpeg')
+
         })
         .catch(error => {
           console.log(error)

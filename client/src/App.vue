@@ -89,8 +89,11 @@
 </template>
 
 <script>
-import axios from 'axios'
+// Components
 import VideoPlayer from '@/pages/VideoPlayer'
+
+// Libraries / Packages
+import axios from 'axios'
 import qs from 'qs'
 
 export default {
@@ -132,8 +135,8 @@ export default {
 
       // grab the query parameters to assign the videoName
       // Value used for http querystring to WFS
-      let urlParams = new URLSearchParams(window.location.search);
-      let videoName = urlParams.get('videoName');
+      let urlParams = new URLSearchParams(window.location.search)
+      let videoName = urlParams.get('videoName')
 
       // WFS Redirect
       const proxy = 'http://localhost:8080/proxy'
@@ -148,7 +151,7 @@ export default {
         outputFormat: 'JSON'
       }
 
-      var url = wfsUrl + qs.stringify(wfsParams)
+      const url = wfsUrl + qs.stringify(wfsParams)
 
       axios.get(url)
         .then(res => {
