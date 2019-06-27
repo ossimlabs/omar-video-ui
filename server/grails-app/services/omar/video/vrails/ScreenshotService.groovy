@@ -18,7 +18,7 @@ class ScreenshotService {
             '-noaccurate_seek',
             '-y',
             '-ss', params.timestamp,
-            '-i', params.videoPath,
+            '-i', params.filter,
             '-vframes', '1',
             '-q:v', '2',
             "${localScreenshotDir}/${params.timestamp}.jpg"

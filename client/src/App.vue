@@ -135,10 +135,10 @@ export default {
       let self = this
       this.loading = true
 
-      // grab the query parameters to assign the videoName
+      // grab the query parameters to get the search filter
       // Value used for http querystring to WFS
       let urlParams = new URLSearchParams(window.location.search)
-      let videoName = urlParams.get('videoName')
+      let filter = urlParams.get('filter')
 
       // WFS Redirect
       // const proxy = 'http://localhost:8080/proxy'
@@ -148,7 +148,7 @@ export default {
         version: '1.1.0',
         request: 'GetFeature',
         typeName: 'omar:video_data_set',
-        filter: `filename like '%${videoName}%'`,
+        filter: filter,
         resultType: 'results',
         outputFormat: 'JSON'
       }
