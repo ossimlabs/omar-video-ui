@@ -161,10 +161,9 @@ export default {
           const videoNameMp4 = res.data.features[0].properties.filename.split('/').pop().replace(/mpg/i, 'mp4')
 
           // Build final url and append to response keeping unified object intact
-          res.data.features[0].properties.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
-          this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
-
+          res.data.features[0].properties.videoUrl = this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
           self.videoResp = this.videoMetaData = res.data
+
           console.log('this.videoMetaData', this.videoMetaData)
         })
         .catch(error => {

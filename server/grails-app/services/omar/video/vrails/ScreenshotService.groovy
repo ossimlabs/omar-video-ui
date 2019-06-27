@@ -9,16 +9,19 @@ class ScreenshotService {
     def getScreenshot( def params) {
         def localScreenshotDir = grailsApplication.config.screenshot.localScreenshotDir
 
+
         // Expand this out to include name of video
         params.filePath = "${localScreenshotDir}/${params.timestamp}.jpg"
 
         def cmdScreenshot = [
-                'ffmpeg',
-                '-ss', params.timestamp,
-                '-i', params.videoPath,
-                '-vframes', '1',
-                '-q:v', '2',
-                "${localScreenshotDir}/${params.timestamp}.jpg"
+            'ffmpeg',
+            '-noaccurate_seek',
+            '-y',
+            '-ss', params.timestamp,
+            '-i', params.videoPath,
+            '-vframes', '1',
+            '-q:v', '2',
+            "${localScreenshotDir}/${params.timestamp}.jpg"
         ]
         def proc = cmdScreenshot.execute()
         proc.consumeProcessOutput()

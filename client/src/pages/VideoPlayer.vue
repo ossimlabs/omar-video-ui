@@ -85,10 +85,11 @@ export default {
         timestamp: this.$refs.video.currentTime,
         videoPath: this.videoUrl
       }
+
       axios.post(apiUrl, qs.stringify(videoParams), { responseType: 'blob' })
         .then(res => {
           console.log('res.data', res)
-          FileSaver.saveAs(res.data, 'screenshot-timestamp_' + this.$refs.video.currentTime + '_.jpeg')
+          FileSaver.saveAs(res.data, 'omar-video_screenshot_timestamp_' + this.$refs.video.currentTime + '_.jpeg')
 
         })
         .catch(error => {
