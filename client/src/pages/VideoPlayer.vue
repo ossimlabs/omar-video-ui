@@ -66,7 +66,8 @@ import FileSaver from 'file-saver'
 export default {
   name: 'videoplayer',
   props: {
-    videoUrl: String
+    videoUrl: String,
+    videoName: String
   },
   components: { },
   data () {
@@ -88,9 +89,7 @@ export default {
 
       axios.post(apiUrl, qs.stringify(videoParams), { responseType: 'blob' })
         .then(res => {
-          console.log('res.data', res)
-          FileSaver.saveAs(res.data, 'omar-video_screenshot_timestamp_' + this.$refs.video.currentTime + '_.jpeg')
-
+          FileSaver.saveAs(res.data, 'omar-video_screenshot_' + this.videoName + '_' + this.$refs.video.currentTime + 's_.jpeg')
         })
         .catch(error => {
           console.log(error)

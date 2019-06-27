@@ -77,6 +77,7 @@
           <v-flex shrink>
             <video-player
             :videoUrl="videoUrl"
+            :videoName="videoName"
             >
 
             </video-player>
@@ -107,6 +108,7 @@ export default {
       videoResp: {},
       videoMetaData: null,
       videoUrl: null,
+      videoName: null,
       buttons: [
         { icon: 'fa-fire', text: 'Most Popular' },
         { icon: 'fa-history', text: 'History' },
@@ -139,7 +141,7 @@ export default {
       let videoName = urlParams.get('videoName')
 
       // WFS Redirect
-      const proxy = 'http://localhost:8080/proxy'
+      // const proxy = 'http://localhost:8080/proxy'
       const wfsUrl = 'https://omar-dev.ossim.io/omar-wfs/wfs?'
       const wfsParams = {
         service: 'WFS',
@@ -159,6 +161,10 @@ export default {
           // Because regex is the devil and this is cleaner
           // split divides url by /, pop returns last, replace modifies filetype
           const videoNameMp4 = res.data.features[0].properties.filename.split('/').pop().replace(/mpg/i, 'mp4')
+
+          // Create a short file name (no file extension)
+          // used for screenshot naming
+          this.videoName = videoNameMp4.split('.').slice(0, -1).join('.')
 
           // Build final url and append to response keeping unified object intact
           res.data.features[0].properties.videoUrl = this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
