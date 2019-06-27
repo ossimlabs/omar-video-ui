@@ -89,7 +89,7 @@ export default {
 
       axios.post(apiUrl, qs.stringify(videoParams), { responseType: 'blob' })
         .then(res => {
-          FileSaver.saveAs(res.data, 'omar-video_screenshot_' + this.videoName + '_' + this.$refs.video.currentTime + 's_.jpeg')
+          FileSaver.saveAs(res.data, 'omar-video_screenshot_' + this.videoName + '_' + this.$refs.video.currentTime + 's.jpeg')
         })
         .catch(error => {
           console.log(error)
