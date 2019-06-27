@@ -14,7 +14,6 @@ class UrlMappings {
         '/proxy'( controller: 'application', action: 'proxy' )
 
         '/screenshot/takeScreenshot'(controller: 'screenshot', action:'takeScreenshot', method:'POST')
-        '/screenshot/displayScreenshot'(controller: 'screenshot', action:'displayScreenshot')
 
         // Modified for VUE Front end in PROD
         if ( Environment.current == Environment.PRODUCTION ) {

@@ -15,6 +15,7 @@
         controls
         width="auto"
         height="auto"
+        ref="video"
         :src="this.videoUrl"
       ></video>
       <div class="controls">
@@ -53,18 +54,20 @@
       </div>
     </div>
 
-<!--    <Modal> </Modal>-->
+    <!--    <Modal> </Modal>-->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import qs from 'qs'
+import FileSaver from 'file-saver'
 
 export default {
   name: 'videoplayer',
   props: {
-    videoUrl: String
+    videoUrl: String,
+    videoName: String
   },
   components: { },
   data () {
@@ -77,51 +80,20 @@ export default {
   watch: {},
   methods: {
     takeScreenshot: function () {
-      // Params for window.open placement
-      const strWindowFeatures = 'left=800,bottom=600,width=100,height=100,'
+      const apiUrl = 'http://localhost:8080/screenshot/takeScreenshot'
 
       const videoParams = {
-        name: 'screeny',
-        timestamp: '00:00:20',
-        videoPath: 'http://localhost/videos/MISP-_42FB6DA1_21FEB03000019081saMISP-_HD000999.mp4'
+        timestamp: this.$refs.video.currentTime,
+        videoPath: this.videoUrl
       }
 
-      // const apiUrlOld = 'http://localhost:8081/omar-services/videoStreaming/takeScreenshot'
-      // const apiUrl = 'http://localhost:8080/screenshot/takeScreenshot'
-
-      const wfsUrl = 'http://localhost:8080/proxy'
-      const wfsParams = {
-        url: 'https://omar-dev.ossim.io/omar-wfs/wfs',
-        service: 'WFS',
-        version: '1.1.0',
-        request: 'GetFeature',
-        typeName: 'omar:video_data_set',
-        filter: 'filename%20like%20%27%25MISP-_42FB6D65_21FEB03000019071saMISP-_HD000999%25%27',
-        resultType: 'results',
-        outputFormat: 'JSON'
-      }
-
-      axios.get(wfsUrl, qs.stringify(wfsParams))
+      axios.post(apiUrl, qs.stringify(videoParams), { responseType: 'blob' })
         .then(res => {
-          console.log('res.data', res)
+          FileSaver.saveAs(res.data, 'omar-video_screenshot_' + this.videoName + '_' + this.$refs.video.currentTime + 's.jpeg')
         })
         .catch(error => {
           console.log(error)
         })
-
-      // const finalUrl = apiUrl + '?' + qs.stringify(screenshotParams, { encode: false })
-
-      /* axios.post(apiUrl, qs.stringify(videoParams))
-        .then(res => {
-          console.log('res.data', res)
-          window.open(
-            'http://localhost:8080/screenshot/displayScreenshot?filePath=/opt/local/www/apache2/html/screenshots/00:00:17.jpg&timestamp=17',
-            'downloadWindow',
-            strWindowFeatures)
-        })
-        .catch(error => {
-          console.log(error)
-        }) */
     }
   }
 }

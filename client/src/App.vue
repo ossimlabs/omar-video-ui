@@ -77,6 +77,7 @@
           <v-flex shrink>
             <video-player
             :videoUrl="videoUrl"
+            :videoName="videoName"
             >
 
             </video-player>
@@ -89,8 +90,11 @@
 </template>
 
 <script>
-import axios from 'axios'
+// Components
 import VideoPlayer from '@/pages/VideoPlayer'
+
+// Libraries / Packages
+import axios from 'axios'
 import qs from 'qs'
 
 export default {
@@ -104,6 +108,7 @@ export default {
       videoResp: {},
       videoMetaData: null,
       videoUrl: null,
+      videoName: null,
       buttons: [
         { icon: 'fa-fire', text: 'Most Popular' },
         { icon: 'fa-history', text: 'History' },
@@ -132,11 +137,11 @@ export default {
 
       // grab the query parameters to get the search filter
       // Value used for http querystring to WFS
-      let urlParams = new URLSearchParams(window.location.search);
-      let filter = urlParams.get('filter');
+      let urlParams = new URLSearchParams(window.location.search)
+      let filter = urlParams.get('filter')
 
       // WFS Redirect
-      const proxy = 'http://localhost:8080/proxy'
+      // const proxy = 'http://localhost:8080/proxy'
       const wfsUrl = 'https://omar-dev.ossim.io/omar-wfs/wfs?'
       const wfsParams = {
         service: 'WFS',
@@ -148,7 +153,7 @@ export default {
         outputFormat: 'JSON'
       }
 
-      var url = wfsUrl + qs.stringify(wfsParams)
+      const url = wfsUrl + qs.stringify(wfsParams)
 
       axios.get(url)
         .then(res => {
@@ -157,11 +162,14 @@ export default {
           // split divides url by /, pop returns last, replace modifies filetype
           const videoNameMp4 = res.data.features[0].properties.filename.split('/').pop().replace(/mpg/i, 'mp4')
 
-          // Build final url and append to response keeping unified object intact
-          res.data.features[0].properties.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
-          this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
+          // Create a short file name (no file extension)
+          // used for screenshot naming
+          this.videoName = videoNameMp4.split('.').slice(0, -1).join('.')
 
+          // Build final url and append to response keeping unified object intact
+          res.data.features[0].properties.videoUrl = this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
           self.videoResp = this.videoMetaData = res.data
+
           console.log('this.videoMetaData', this.videoMetaData)
         })
         .catch(error => {
