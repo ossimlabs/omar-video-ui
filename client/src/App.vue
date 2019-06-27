@@ -138,8 +138,8 @@ export default {
       // grab the query parameters to get the search filter
       // Value used for http querystring to WFS
 
-      let urlParams = new URLSearchParams(window.location.search);
-      let filter = urlParams.get('filter');
+      let urlParams = new URLSearchParams(window.location.search)
+      let filter = urlParams.get('filter')
 
 
       // WFS Redirect
@@ -150,7 +150,7 @@ export default {
         version: '1.1.0',
         request: 'GetFeature',
         typeName: 'omar:video_data_set',
-        filter: `filename like '%${filter}%'`,
+        filter: filter,
         resultType: 'results',
         outputFormat: 'JSON'
       }
