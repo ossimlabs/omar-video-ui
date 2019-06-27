@@ -137,8 +137,10 @@ export default {
 
       // grab the query parameters to get the search filter
       // Value used for http querystring to WFS
+
       let urlParams = new URLSearchParams(window.location.search)
       let filter = urlParams.get('filter')
+
 
       // WFS Redirect
       // const proxy = 'http://localhost:8080/proxy'

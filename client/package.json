@@ -16,6 +16,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.8.2",
     "axios": "^0.18.0",
+    "file-saver": "^2.0.2",
     "uiv": "^0.14.4",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
