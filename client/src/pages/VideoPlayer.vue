@@ -91,6 +91,7 @@ export default {
       }
 
       console.log('params', qs.stringify(videoParams))
+
       axios.post(apiUrl, qs.stringify(videoParams), { responseType: 'blob' })
         .then(res => {
           console.log('res', res)
