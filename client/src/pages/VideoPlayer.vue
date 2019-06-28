@@ -80,7 +80,8 @@ export default {
   watch: {},
   methods: {
     takeScreenshot: function () {
-      const apiUrl = 'http://localhost:8080/screenshot/takeScreenshot'
+      const apiUrl = `${process.env.SERVER_URL}/screenshot/takeScreenshot`
+      console.log('apiUrl', apiUrl)
 
       const videoParams = {
         timestamp: this.$refs.video.currentTime,
