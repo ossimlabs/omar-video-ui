@@ -80,6 +80,7 @@ export default {
   watch: {},
   methods: {
     takeScreenshot: function () {
+      console.log('env: ', process.env)
       const apiUrl = `${process.env.SERVER_URL}/screenshot/takeScreenshot`
       console.log('apiUrl', apiUrl)
 
