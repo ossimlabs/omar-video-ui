@@ -81,7 +81,7 @@ export default {
   methods: {
     takeScreenshot: function () {
       console.log('env: ', process.env)
-      
+
       const apiUrl = `${process.env.SERVER_URL}/screenshot/takeScreenshot`
       console.log('apiUrl', apiUrl)
 
@@ -90,8 +90,10 @@ export default {
         videoPath: this.videoUrl
       }
 
+      console.log('params', qs.stringify(videoParams))
       axios.post(apiUrl, qs.stringify(videoParams), { responseType: 'blob' })
         .then(res => {
+          console.log('res', res)
           FileSaver.saveAs(res.data, 'omar-video_screenshot_' + this.videoName + '_' + this.$refs.video.currentTime + 's.jpeg')
         })
         .catch(error => {
