@@ -1,8 +1,13 @@
 ---
+screenshot:
+    localScreenshotDir: /opt/local/www/apache2/html/screenshots
+---
 grails:
     profile: vue
     codegen:
         defaultPackage: omar.video.vrails
+    resources:
+        pattern: /**
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events

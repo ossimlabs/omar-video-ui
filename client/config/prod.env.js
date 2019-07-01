@@ -1,5 +1,6 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  SERVER_URL: '"http://localhost:8080"'
+  SERVER_URL: '"https://omar-dev.ossim.io/omar-video-vrails"'
+  // SERVER_URL: '""'
 }
