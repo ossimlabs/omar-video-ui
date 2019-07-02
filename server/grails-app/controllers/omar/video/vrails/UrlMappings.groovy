@@ -14,8 +14,10 @@ class UrlMappings {
         '/proxy'( controller: 'application', action: 'proxy' )
 
         '/screenshot/takeScreenshot'(controller: 'screenshot', action:'takeScreenshot', method:'POST')
+        '/screenshot'(controller: 'screenshot', action:'index')
 
         // Modified for VUE Front end in PROD
+        println 'Environment' + Environment.current
         if ( Environment.current == Environment.PRODUCTION ) {
             '/'(uri: '/index.html')
         } else {
