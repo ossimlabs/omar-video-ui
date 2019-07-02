@@ -83,7 +83,7 @@ export default {
       console.log('added slash to url path...')
       console.log('env: ', process.env)
 
-      const apiUrl = `${process.env.SERVER_URL}/screenshot/takeScreenshot`
+      const apiUrl = `${process.env.SERVER_URL}/screenshot`
       console.log('apiUrl', apiUrl)
 
       const videoParams = {

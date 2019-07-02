@@ -4,16 +4,11 @@ import grails.util.Environment
 
 class UrlMappings {
     static mappings = {
-        delete "/$controller/$id(.$format)?"(action:"delete")
-        get "/$controller(.$format)?"(action:"index")
-        get "/$controller/$id(.$format)?"(action:"show")
-        post "/$controller(.$format)?"(action:"save")
-        put "/$controller/$id(.$format)?"(action:"update")
-        patch "/$controller/$id(.$format)?"(action:"patch")
+//        '/proxy'( controller: 'application', action: 'proxy' )
 
-        '/proxy'( controller: 'application', action: 'proxy' )
+        '/'(controller: 'application', action:'index')
 
-        '/screenshot/takeScreenshot'(controller: 'screenshot', action:'takeScreenshot', method:'POST')
+//        '/screenshot'(controller: 'screenshot', action:'takeScreenshot', method:'GET')
         '/screenshot'(controller: 'screenshot', action:'index')
 
         // Modified for VUE Front end in PROD
@@ -23,6 +18,13 @@ class UrlMappings {
         } else {
             '/'(controller: 'application', action:'index')
         }
+
+        delete "/$controller/$id(.$format)?"(action:"delete")
+        get "/$controller(.$format)?"(action:"index")
+        get "/$controller/$id(.$format)?"(action:"show")
+        post "/$controller(.$format)?"(action:"save")
+        put "/$controller/$id(.$format)?"(action:"update")
+        patch "/$controller/$id(.$format)?"(action:"patch")
 
         "500"(view: '/error')
         "404"(view: '/notFound')
