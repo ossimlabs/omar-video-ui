@@ -3,15 +3,14 @@ import grails.converters.JSON
 
 class ScreenshotController {
 
-    def ScreenshotService
+    def screenshotService
 
     def index() {
-        render {
-            div(id: "myDiv", "hello world")
-        }
-    }
-    def takeScreenshot() {
-        def screenshotDetails = ScreenshotService.getScreenshot(params)
+        def screenshotDetails = screenshotService.getScreenshot(params)
         render contentType: 'image/jpeg', file: new File(params.filePath)
     }
+//    def takeScreenshot() {
+//        def screenshotDetails = screenshotService.getScreenshot(params)
+//        render contentType: 'image/jpeg', file: new File(params.filePath)
+//    }
 }
