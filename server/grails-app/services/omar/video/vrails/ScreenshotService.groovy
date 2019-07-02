@@ -9,9 +9,11 @@ class ScreenshotService {
     def getScreenshot( def params) {
         def localScreenshotDir = grailsApplication.config.screenshot.localScreenshotDir
 
+        File file = File.createTempFile("tmp-omar-vrails-screenshot",".jpg")
 
         // Expand this out to include name of video
-        params.filePath = "${localScreenshotDir}/${params.timestamp}.jpg"
+//        params.filePath = "${localScreenshotDir}/${params.timestamp}.jpg"
+        params.filePath = file
 
         def cmdScreenshot = [
             'ffmpeg',
@@ -21,11 +23,17 @@ class ScreenshotService {
             '-i', params.videoPath,
             '-vframes', '1',
             '-q:v', '2',
-            "${localScreenshotDir}/${params.timestamp}.jpg"
+            "${file}"
         ]
+
         def proc = cmdScreenshot.execute()
+        def outputStream = new StringBuffer()
+        proc.waitForProcessOutput(outputStream, System.err)
+
+//        file.write(proc)
+        /*def proc = cmdScreenshot.execute()
         proc.consumeProcessOutput()
-        proc.waitFor()
+        proc.waitFor()*/
 
         [ params: params ]
     }
