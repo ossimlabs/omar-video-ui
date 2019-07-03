@@ -125,7 +125,6 @@ export default {
   computed: {},
   watch: {
     '$route' (to, from) {
-      console.log('route changed')
       // react to route changes...
     }
   },
@@ -172,7 +171,6 @@ export default {
           res.data.features[0].properties.videoUrl = this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
           self.videoResp = this.videoMetaData = res.data
 
-          console.log('this.videoMetaData', this.videoMetaData)
         })
         .catch(error => {
           console.log(error)

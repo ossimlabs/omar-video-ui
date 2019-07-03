@@ -7,12 +7,8 @@ class ScreenshotService {
     def grailsApplication
 
     def getScreenshot( def params) {
-        def localScreenshotDir = grailsApplication.config.screenshot.localScreenshotDir
-
         File file = File.createTempFile("tmp-omar-vrails-screenshot",".jpg", new File('/tmp'))
 
-        // Expand this out to include name of video
-//        params.filePath = "${localScreenshotDir}/${params.timestamp}.jpg"
         params.filePath = file
 
         def cmdScreenshot = [
@@ -29,11 +25,6 @@ class ScreenshotService {
         def proc = cmdScreenshot.execute()
         def outputStream = new StringBuffer()
         proc.waitForProcessOutput(outputStream, System.err)
-
-//        file.write(proc)
-        /*def proc = cmdScreenshot.execute()
-        proc.consumeProcessOutput()
-        proc.waitFor()*/
 
         // deletes file when the virtual machine terminate
         // file.deleteOnExit()
