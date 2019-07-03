@@ -1,4 +1,4 @@
-package omar.video.vrails
+package omar.video.ui
 
 class BootStrap {
 

@@ -1,8 +1,11 @@
+server:
+    contextPath: /omar-video-ui
+
 ---
 grails:
     profile: vue
     codegen:
-        defaultPackage: omar.video.vrails
+        defaultPackage: omar.video.ui
     resources:
         pattern: /**
     gorm:

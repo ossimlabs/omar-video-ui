@@ -1,6 +1,6 @@
 spring:
   application:
-    name: omar-video-vrails
+    name: omar-video-ui
   cloud:
     config:
       enabled: false

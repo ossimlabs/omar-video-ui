@@ -1,4 +1,4 @@
-package omar.video.vrails
+package omar.video.ui
 
 import grails.util.Environment
 

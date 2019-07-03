@@ -1,4 +1,4 @@
-package omar.video.vrails
+package omar.video.ui
 import grails.transaction.Transactional
 
 @Transactional( readOnly = true )
@@ -7,7 +7,7 @@ class ScreenshotService {
     def grailsApplication
 
     def getScreenshot( def params) {
-        File file = File.createTempFile("tmp-omar-vrails-screenshot",".jpg", new File('/tmp'))
+        File file = File.createTempFile("tmp-omar-ui-screenshot",".jpg", new File('/tmp'))
 
         params.filePath = file
 
