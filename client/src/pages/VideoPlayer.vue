@@ -12,49 +12,56 @@
           <span> video: {{ this.videoUrl }} </span>
         </v-alert>
 
+        Time: {{ videoTime }} duration: {{ videoDuration }}
         <!-- video area -->
-        <v-flex xs12 sm12 class="video-wrapper text-xs-center" v-if="this.videoUrl">
+        <v-flex xs12 sm12 class="video-wrapper text-xs-center" v-show="this.videoUrl">
           <video
             autoplay
             width="auto"
             height="auto"
             ref="video"
+            id="video"
             :src="this.videoUrl"
+            class="custom-video-styles"
             :class="{ 'maximize-video': ifMaximize}"
           ></video>
         </v-flex>
 
         <div class="slider-holder">
-          <v-slider v-model="slider"
+          <v-slider v-model="videoTime"
+                    :max="videoDuration"
                     :thumb-size="24"
                     thumb-label="always">
-
           </v-slider>
         </div>
 
         <!-- video controls -->
         <v-flex xs12 shrink text-xs-center class="video-controls" :class="{ 'maximize-controls': ifMaximize}">
-            <v-btn flat icon large color="" @click="">
-              <v-icon  class="">fa-pause</v-icon>
-            </v-btn>
+          <v-btn flat icon large color="" @click="pauseVideo()">
+            <v-icon  class="">fa-pause</v-icon>
+          </v-btn>
 
-            <v-btn flat icon large color="">
-              <v-icon class="">fa-backward</v-icon>
-            </v-btn>
+          <v-btn flat icon large color="" @click="playVideo()">
+            <v-icon  class="">fa-play</v-icon>
+          </v-btn>
 
-            <v-btn flat icon large color="">
-              <v-icon class="" color="white">fa-forward</v-icon>
-            </v-btn>
+          <v-btn flat icon large color="">
+            <v-icon class="">fa-backward</v-icon>
+          </v-btn>
 
-            <!-- Maximize -->
-            <v-btn icon large color="" @click="ifMaximize = !ifMaximize" v-show="!ifMaximize">
-              <v-icon class="" color="white">fa-expand</v-icon>
-            </v-btn>
+          <v-btn flat icon large color="">
+            <v-icon class="" color="white">fa-forward</v-icon>
+          </v-btn>
 
-            <!-- Minimize -->
-            <v-btn icon large color="" @click="ifMaximize = !ifMaximize" v-show="ifMaximize" class="minimize-button">
-              <v-icon class="" color="white">fa-compress</v-icon>
-            </v-btn>
+          <!-- Maximize -->
+          <v-btn icon large color="" @click="ifMaximize = !ifMaximize" v-show="!ifMaximize">
+            <v-icon class="" color="white">fa-expand</v-icon>
+          </v-btn>
+
+          <!-- Minimize -->
+          <v-btn icon large color="" @click="ifMaximize = !ifMaximize" v-show="ifMaximize" class="minimize-button">
+            <v-icon class="" color="white">fa-compress</v-icon>
+          </v-btn>
         </v-flex>
 
         <!-- video tools -->
@@ -78,7 +85,6 @@
 
       </v-layout>
 
-
     </v-container>
 </div>
 
@@ -99,15 +105,42 @@ export default {
   components: { },
   data () {
     return {
-      ifMaximize: false
+      ifMaximize: false,
+      videoTime: null,
+      videoDuration: null
     }
   },
   created () {},
   destroyed () {},
-  mounted () {},
+  mounted () {
+    this.attachListenersToVideo()
+  },
   computed: {},
   watch: {},
   methods: {
+    attachListenersToVideo: function () {
+      let vid = document.getElementById('video')
+      // Use arrow function because this refers to the videoPlayer
+      // Basically anonymous scope
+      let videoTimerFunction = () => {
+        this.videoTime = vid.currentTime
+
+        // This has to be in the listener but we're going to force it to only happen once
+        // this.videoDuration = null on init
+        if (this.videoDuration === null) {
+          this.videoDuration = vid.duration
+          console.log('duration', this.videoDuration)
+        }
+      }
+
+      vid.ontimeupdate = function () { videoTimerFunction()}
+    },
+    pauseVideo: function () {
+      document.getElementById('video').pause()
+    },
+    playVideo: function () {
+      document.getElementById('video').play()
+    },
     takeScreenshot: function () {
       const apiUrl = `${process.env.SERVER_URL}/screenshot`
 
@@ -129,6 +162,9 @@ export default {
 </script>
 
 <style scoped>
+  .custom-video-styles {
+    object-fit: cover;
+  }
   /*.minimize-button {*/
   /*  z-index: 101;*/
   /*  background-color: white;*/
