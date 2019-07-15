@@ -12,7 +12,6 @@
           <span> video: {{ this.videoUrl }} </span>
         </v-alert>
 
-        Time: {{ videoTime }} duration: {{ videoDuration }}
         <!-- video area -->
         <v-flex xs12 sm12 class="video-wrapper text-xs-center" v-show="this.videoUrl">
           <video
@@ -21,11 +20,14 @@
             height="auto"
             ref="video"
             id="video"
-            :src="this.videoUrl"
+            src="../assets/videos/vid1.mp4"
             class="custom-video-styles"
             :class="{ 'maximize-video': ifMaximize}"
           ></video>
         </v-flex>
+        <!-- Replaced because WFS keeps dying
+                   :src="this.videoUrl"
+        -->
 
         <div class="slider-holder">
           <v-slider v-model="videoTime"
@@ -37,20 +39,23 @@
 
         <!-- video controls -->
         <v-flex xs12 shrink text-xs-center class="video-controls" :class="{ 'maximize-controls': ifMaximize}">
-          <v-btn flat icon large color="" @click="pauseVideo()">
+
+          <v-btn flat icon large color="" @click="rewindVideo(10)">
+            <v-icon class="">fa-undo</v-icon>
+            <span class="skip-duration">10</span>
+          </v-btn>
+
+          <v-btn v-if="videoIsPlaying" flat icon large color="" @click="pauseVideo()">
             <v-icon  class="">fa-pause</v-icon>
           </v-btn>
 
-          <v-btn flat icon large color="" @click="playVideo()">
+          <v-btn v-if="!videoIsPlaying" flat icon large color="" @click="playVideo()">
             <v-icon  class="">fa-play</v-icon>
           </v-btn>
 
-          <v-btn flat icon large color="" @click="rewindVideo(10)">
-            <v-icon class="">fa-backward</v-icon>
-          </v-btn>
-
           <v-btn flat icon large color="" @click="fastForwardVideo(10)">
-            <v-icon class="" color="white">fa-forward</v-icon>
+            <v-icon class="" color="white">fa-redo</v-icon>
+            <span class="skip-duration">10</span>
           </v-btn>
 
           <!-- Maximize -->
@@ -84,7 +89,6 @@
         </v-flex>
 
       </v-layout>
-
     </v-container>
 </div>
 
@@ -99,15 +103,20 @@ import FileSaver from 'file-saver'
 export default {
   name: 'videoplayer',
   props: {
-    videoUrl: String,
+    // unocomment
+    // videoUrl: String,
     videoName: String
   },
   components: { },
   data () {
     return {
+      // take this out too
+      videoUrl: '../assets/videos/vid1.mp4',
+      //
       ifMaximize: false,
       videoTime: null,
-      videoDuration: null
+      videoDuration: null,
+      videoIsPlaying: true
     }
   },
   created () {},
@@ -118,6 +127,12 @@ export default {
   computed: {},
   watch: {},
   methods: {
+    /** TODO
+     * Style video controls
+     * Style video tools
+     * Add behavior to slider
+     * Ensure slider displays accurately when maximized
+    **/
     attachListenersToVideo: function () {
       let vid = document.getElementById('video')
       // Use arrow function because this refers to the videoPlayer
@@ -130,21 +145,31 @@ export default {
         if (this.videoDuration === null) {
           this.videoDuration = vid.duration
           console.log('duration', this.videoDuration)
+          console.log('this.refs', this.$refs)
         }
       }
 
-      vid.ontimeupdate = function () { videoTimerFunction()}
+      vid.ontimeupdate = function () { videoTimerFunction() }
     },
     pauseVideo: function () {
       document.getElementById('video').pause()
+      this.videoIsPlaying = !this.videoIsPlaying
     },
     playVideo: function () {
       document.getElementById('video').play()
+      this.videoIsPlaying = !this.videoIsPlaying
     },
-    rewindVideo: function(length) {
-      document.getElementById('video').currentTime = this.$refs.video.currentTime - length
+    rewindVideo: function (length) {
+      const curTime = this.$refs.video.currentTime
+      document.getElementById('video').currentTime = curTime - length
     },
     fastForwardVideo: function (length) {
+      const curTime = this.$refs.video.currentTime
+      // Flips pause to play
+      // Also restarts slider and video to 0:00 and autoplays video
+      if (curTime === this.videoDuration) {
+        this.videoIsPlaying = false
+      }
       document.getElementById('video').currentTime = this.$refs.video.currentTime + length
     },
     takeScreenshot: function () {
@@ -168,6 +193,12 @@ export default {
 </script>
 
 <style scoped>
+  .skip-duration {
+    /*margin-left: -5em;*/
+    font-size: .7em;
+    top:6px;
+    position: absolute;
+  }
   .custom-video-styles {
     object-fit: cover;
   }
