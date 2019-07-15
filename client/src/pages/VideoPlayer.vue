@@ -45,11 +45,11 @@
             <v-icon  class="">fa-play</v-icon>
           </v-btn>
 
-          <v-btn flat icon large color="">
+          <v-btn flat icon large color="" @click="rewindVideo(10)">
             <v-icon class="">fa-backward</v-icon>
           </v-btn>
 
-          <v-btn flat icon large color="">
+          <v-btn flat icon large color="" @click="fastForwardVideo(10)">
             <v-icon class="" color="white">fa-forward</v-icon>
           </v-btn>
 
@@ -140,6 +140,12 @@ export default {
     },
     playVideo: function () {
       document.getElementById('video').play()
+    },
+    rewindVideo: function(length) {
+      document.getElementById('video').currentTime = this.$refs.video.currentTime - length
+    },
+    fastForwardVideo: function (length) {
+      document.getElementById('video').currentTime = this.$refs.video.currentTime + length
     },
     takeScreenshot: function () {
       const apiUrl = `${process.env.SERVER_URL}/screenshot`
