@@ -126,7 +126,11 @@ export default {
   created () {},
   destroyed () {},
   mounted () {
+    // Currently only one listener is attached for watching time.
+    // Required for slider, ff, and rewind functions to work.
     this.attachListenersToVideo()
+
+    // get this now.  Referenced a lot throughout app.
     this.videoElement = document.getElementById('video')
   },
   computed: {},
@@ -150,7 +154,6 @@ export default {
         // this.videoDuration = null on init
         if (this.videoDuration === null) {
           this.videoDuration = vid.duration
-          console.log('duration', this.videoDuration)
         }
       }
       vid.ontimeupdate = function () { videoTimerFunction() }
