@@ -29,12 +29,12 @@
                    :src="this.videoUrl"
         -->
 
+        <!-- mousedown/up are used to listen for slider interactions -->
+        <!-- v-model two-way binds to video time, allowing for smooth immediate control -->
         <div class="slider-holder" >
           <v-slider v-model="videoTime"
                     @mousedown="pauseVideo()"
                     @mouseup="applyNewSliderValue()"
-                    validate-on-blur
-                    value="15"
                     :max="videoDuration"
                     :thumb-size="24"
                     thumb-label="always">
@@ -127,6 +127,7 @@ export default {
   destroyed () {},
   mounted () {
     this.attachListenersToVideo()
+    this.videoElement = document.getElementById('video')
   },
   computed: {},
   watch: {},
@@ -138,6 +139,7 @@ export default {
      * Ensure slider displays accurately when maximized
     **/
     attachListenersToVideo: function () {
+      // Listener can't use this.videoElement due to DOM render timing and digest loops.
       let vid = document.getElementById('video')
       // Use arrow function because this refers to the videoPlayer
       // Basically anonymous scope
@@ -154,24 +156,23 @@ export default {
       vid.ontimeupdate = function () { videoTimerFunction() }
     },
     applyNewSliderValue: function () {
-      const curTime = this.videoTime
-      document.getElementById('video').currentTime = curTime
+      this.videoElement.currentTime = this.videoTime
       this.playVideo()
     },
     maximizeVideo: function() {
-      document.getElementById('video').requestFullscreen()
+      this.videoElement.requestFullscreen()
     },
     pauseVideo: function () {
-      document.getElementById('video').pause()
+      this.videoElement.pause()
       this.videoIsPlaying = !this.videoIsPlaying
     },
     playVideo: function () {
-      document.getElementById('video').play()
+      this.videoElement.play()
       this.videoIsPlaying = !this.videoIsPlaying
     },
     rewindVideo: function (length) {
       const curTime = this.$refs.video.currentTime
-      document.getElementById('video').currentTime = curTime - length
+      this.videoElement.currentTime = curTime - length
     },
     fastForwardVideo: function (length) {
       const curTime = this.$refs.video.currentTime
@@ -180,7 +181,7 @@ export default {
       if (curTime === this.videoDuration) {
         this.videoIsPlaying = false
       }
-      document.getElementById('video').currentTime = this.$refs.video.currentTime + length
+      this.videoElement.currentTime = this.$refs.video.currentTime + length
     },
     takeScreenshot: function () {
       const apiUrl = `${process.env.SERVER_URL}/screenshot`
