@@ -71,7 +71,7 @@
     </v-toolbar>
 
     <!-- MAIN CONTENT AREA -->
-    <v-content>
+    <v-content app>
       <v-container fill-height>
         <v-layout justify-center align-center>
           <v-flex shrink>

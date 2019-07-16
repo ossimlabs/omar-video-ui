@@ -29,8 +29,12 @@
                    :src="this.videoUrl"
         -->
 
-        <div class="slider-holder">
+        <div class="slider-holder" >
           <v-slider v-model="videoTime"
+                    @mousedown="pauseVideo()"
+                    @mouseup="applyNewSliderValue()"
+                    validate-on-blur
+                    value="15"
                     :max="videoDuration"
                     :thumb-size="24"
                     thumb-label="always">
@@ -38,7 +42,7 @@
         </div>
 
         <!-- video controls -->
-        <v-flex xs12 shrink text-xs-center class="video-controls" :class="{ 'maximize-controls': ifMaximize}">
+        <v-flex xs4 text-xs-center class="video-controls" :class="{ 'maximize-controls': ifMaximize}">
 
           <v-btn flat icon large color="" @click="rewindVideo(10)">
             <v-icon class="">fa-undo</v-icon>
@@ -59,7 +63,7 @@
           </v-btn>
 
           <!-- Maximize -->
-          <v-btn icon large color="" @click="ifMaximize = !ifMaximize" v-show="!ifMaximize">
+          <v-btn icon large color="" @click="maximizeVideo()" v-show="!ifMaximize">
             <v-icon class="" color="white">fa-expand</v-icon>
           </v-btn>
 
@@ -145,11 +149,17 @@ export default {
         if (this.videoDuration === null) {
           this.videoDuration = vid.duration
           console.log('duration', this.videoDuration)
-          console.log('this.refs', this.$refs)
         }
       }
-
       vid.ontimeupdate = function () { videoTimerFunction() }
+    },
+    applyNewSliderValue: function () {
+      const curTime = this.videoTime
+      document.getElementById('video').currentTime = curTime
+      this.playVideo()
+    },
+    maximizeVideo: function() {
+      document.getElementById('video').requestFullscreen()
     },
     pauseVideo: function () {
       document.getElementById('video').pause()
@@ -199,17 +209,15 @@ export default {
     top:6px;
     position: absolute;
   }
-  .custom-video-styles {
-    object-fit: cover;
-  }
-  /*.minimize-button {*/
-  /*  z-index: 101;*/
-  /*  background-color: white;*/
-  /*}*/
+/*  .custom-video-styles {
+    z-index: 5;
+  }*/
 
   /*Bumps controls up against video player*/
   .video-controls {
-    margin-top: -3em;
+    margin-top: -2em;
+    background-color: #424242;
+    border-radius: 18px;
   }
   .maximize-controls {
     position:fixed;
@@ -218,11 +226,11 @@ export default {
     left: 50%;
     transform: translate(-50%, 0);
   }
-  .maximize-video {
+/*  .maximize-video {
     position: fixed; right: 0; bottom: 0;
     min-width: 100%; min-height: 100%;
     width: auto; height: auto; z-index: 2;
-  }
+  }*/
   .slider-holder {
     width:720px;
     margin-top: -2em;
