@@ -17,7 +17,6 @@
               </v-btn>
             </v-flex>
 
-
             <v-flex>
               <v-btn flat icon color="success" disabled>
                 <v-icon class="" color="white">fa-share-alt</v-icon>
@@ -142,8 +141,9 @@ export default {
     // Currently only one listener is attached for watching time.
     // Required for slider, ff, and rewind functions to work.
     this.attachListenersToVideo()
+    this.attachKeyStrokeListeners()
 
-    // get this now.  Referenced a lot throughout app.
+    // get this now.  Referenced throughout app.
     this.videoElement = document.getElementById('video')
   },
   computed: {},
@@ -155,6 +155,18 @@ export default {
      * Add behavior to slider
      * Ensure slider displays accurately when maximized
     **/
+    attachKeyStrokeListeners: function () {
+      window.addEventListener('keydown', (e) => {
+        switch (e.key) {
+          case ' ':
+            this.videoIsPlaying ? this.pauseVideo() : this.playVideo(); break
+          case 'ArrowRight':
+            this.fastForwardVideo(10); break
+          case 'ArrowLeft':
+            this.rewindVideo(10); break
+        }
+      })
+    },
     attachListenersToVideo: function () {
       // Listener can't use this.videoElement due to DOM render timing and digest loops.
       let vid = document.getElementById('video')
