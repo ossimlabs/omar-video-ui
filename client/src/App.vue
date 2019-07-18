@@ -91,7 +91,7 @@
 
 <script>
 // Components
-import VideoPlayer from '@/pages/VideoPlayer'
+import VideoPlayer from '@/components/VideoPlayer/VideoPlayer'
 
 // Libraries / Packages
 import axios from 'axios'

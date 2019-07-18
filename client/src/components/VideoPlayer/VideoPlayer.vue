@@ -2,35 +2,12 @@
   <div>
     <v-container fluid>
       <v-layout row no-wrap >
-        <v-flex xs1>
-          <v-layout row wrap d-block class="video-tools" pr-1>
-            <!-- video tools -->
-            <v-flex>
-              <v-btn flat icon color="success" @click="takeScreenshot()">
-                <v-icon class="">fa-camera</v-icon>
-              </v-btn>
-            </v-flex>
+        <video-tools
+          :video-url="videoUrl"
+          :video-time="videoTime"
+        >
 
-            <v-flex>
-              <v-btn flat icon color="blue" disabled>
-                <v-icon class="">fa-download</v-icon>
-              </v-btn>
-            </v-flex>
-
-            <v-flex>
-              <v-btn flat icon color="success" disabled>
-                <v-icon class="" color="white">fa-share-alt</v-icon>
-              </v-btn>
-            </v-flex>
-
-            <v-flex>
-              <v-btn flat icon color="success" disabled>
-                <v-icon class="" color="white">fa-star</v-icon>
-              </v-btn>
-            </v-flex>
-
-          </v-layout>
-        </v-flex>
+        </video-tools>
 
         <div class="video-area">
           <v-layout row wrap justify-center pa-0>
@@ -63,12 +40,15 @@
             <!-- mousedown/up are used to listen for slider interactions -->
             <!-- v-model two-way binds to video time, allowing for smooth immediate control -->
             <div class="slider-holder">
-              <v-slider v-model="videoTime"
-                        @mousedown="pauseVideo()"
-                        @mouseup="applyNewSliderValue()"
-                        :max="videoDuration"
-                        :thumb-size="24"
-                        thumb-label="always">
+              <v-slider
+                v-model="videoTime"
+                @mousedown="pauseVideo()"
+                @mouseup="applyNewSliderValue()"
+                :max="videoDuration"
+                :thumb-size="24"
+                thumb-label="always"
+                :step=".001"
+              >
               </v-slider>
             </div>
 
@@ -80,7 +60,7 @@
                 <span class="skip-duration">10</span>
               </v-btn>
 
-              <v-btn flat icon large color="success" v-if="videoIsPlaying"@click="pauseVideo()">
+              <v-btn flat icon large color="success" v-if="videoIsPlaying" @click="pauseVideo()">
                 <v-icon  class="">fa-pause</v-icon>
               </v-btn>
 
@@ -97,11 +77,6 @@
               <v-btn flat icon large color="success" @click="maximizeVideo()" v-show="!ifMaximize">
                 <v-icon class="" color="success">fa-expand</v-icon>
               </v-btn>
-
-              <!-- Minimize -->
-              <v-btn flat icon large color="success" @click="ifMaximize = !ifMaximize" v-show="ifMaximize" class="minimize-button">
-                <v-icon class="" color="success">fa-compress</v-icon>
-              </v-btn>
             </v-flex>
           </v-layout>
         </div>
@@ -113,26 +88,21 @@
 </template>
 
 <script>
-import axios from 'axios'
-import qs from 'qs'
-import FileSaver from 'file-saver'
+import VideoTools from '@/components/VideoPlayer/VideoTools'
 
 export default {
-  name: 'videoplayer',
+  name: 'VideoPlayer',
   props: {
     videoUrl: String,
     videoName: String
   },
-  components: { },
+  components: { VideoTools },
   data () {
     return {
-      // take this out too
-      // videoUrl: '../assets/videos/vid1.mp4',
-      //
       ifMaximize: false,
       videoTime: null,
       videoDuration: null,
-      videoIsPlaying: true
+      videoIsPlaying: true,
     }
   },
   created () {},
@@ -145,16 +115,11 @@ export default {
 
     // get this now.  Referenced throughout app.
     this.videoElement = document.getElementById('video')
+    console.log('this.videoElement ', this.videoElement)
   },
   computed: {},
   watch: {},
   methods: {
-    /** TODO
-     * Style video controls
-     * Style video tools
-     * Add behavior to slider
-     * Ensure slider displays accurately when maximized
-    **/
     attachKeyStrokeListeners: function () {
       window.addEventListener('keydown', (e) => {
         switch (e.key) {
@@ -210,33 +175,12 @@ export default {
         this.videoIsPlaying = false
       }
       this.videoElement.currentTime = this.$refs.video.currentTime + length
-    },
-    takeScreenshot: function () {
-      const apiUrl = `${process.env.SERVER_URL}/screenshot`
-
-      const videoParams = {
-        timestamp: this.$refs.video.currentTime,
-        videoPath: this.videoUrl
-      }
-
-      axios.post(apiUrl, qs.stringify(videoParams), { responseType: 'blob' })
-        .then(res => {
-          FileSaver.saveAs(res.data, 'omar-video_screenshot_' + this.videoName + '_' + this.$refs.video.currentTime + 's.jpeg')
-        })
-        .catch(error => {
-          console.log('error', error)
-        })
     }
   }
 }
 </script>
 
 <style scoped>
-  .video-tools {
-    border:2px solid #424242;
-    border-radius: 12px 0px 0px 12px;
-    margin-right:-.50em
-  }
   .video-area {
     width:720px;
     padding:0;
