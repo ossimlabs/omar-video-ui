@@ -118,7 +118,7 @@ export default {
     }
   },
   created () {
-    // this.fetchData()
+    this.fetchData()
   },
   destroyed () {},
   mounted () {},
