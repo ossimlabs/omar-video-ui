@@ -71,7 +71,7 @@
     </v-toolbar>
 
     <!-- MAIN CONTENT AREA -->
-    <v-content>
+    <v-content app>
       <v-container fill-height>
         <v-layout justify-center align-center>
           <v-flex shrink>
@@ -91,7 +91,7 @@
 
 <script>
 // Components
-import VideoPlayer from '@/pages/VideoPlayer'
+import VideoPlayer from '@/components/VideoPlayer/VideoPlayer'
 
 // Libraries / Packages
 import axios from 'axios'
