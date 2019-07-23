@@ -6,7 +6,7 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/?filter=:filter',
+      path: '/?filter=:filter'
     }
   ]
 })

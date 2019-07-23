@@ -140,7 +140,6 @@ export default {
       let urlParams = new URLSearchParams(window.location.search)
       let filter = urlParams.get('filter')
 
-
       // WFS Redirect
       // const proxy = 'http://localhost:8080/proxy'
       const wfsUrl = 'https://omar-dev.ossim.io/omar-wfs/wfs?'
