@@ -169,7 +169,6 @@ export default {
           // Build final url and append to response keeping unified object intact
           res.data.features[0].properties.videoUrl = this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
           self.videoResp = this.videoMetaData = res.data
-
         })
         .catch(error => {
           console.log(error)

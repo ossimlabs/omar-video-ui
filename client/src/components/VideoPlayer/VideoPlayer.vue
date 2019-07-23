@@ -102,7 +102,7 @@ export default {
       ifMaximize: false,
       videoTime: null,
       videoDuration: null,
-      videoIsPlaying: true,
+      videoIsPlaying: true
     }
   },
   created () {},
@@ -115,7 +115,6 @@ export default {
 
     // get this now.  Referenced throughout app.
     this.videoElement = document.getElementById('video')
-    console.log('this.videoElement ', this.videoElement)
   },
   computed: {},
   watch: {},
