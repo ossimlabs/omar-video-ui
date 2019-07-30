@@ -1,11 +1,11 @@
----
-screenshot:
-    localScreenshotDir: /opt/local/www/apache2/html/screenshots
+server:
+    contextPath: /omar-video-ui
+
 ---
 grails:
     profile: vue
     codegen:
-        defaultPackage: omar.video.vrails
+        defaultPackage: omar.video.ui
     resources:
         pattern: /**
     gorm:

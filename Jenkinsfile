@@ -11,7 +11,7 @@ properties([
     [
         $class: 'GithubProjectProperty',
         displayName: '',
-        projectUrlStr: 'https://github.com/ossimlabs/omar-video-vrails'
+        projectUrlStr: 'https://github.com/ossimlabs/omar-video-ui'
     ]
 ])
 

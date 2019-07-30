@@ -1,4 +1,4 @@
-package omar.video.vrails
+package omar.video.ui
 import grails.transaction.Transactional
 
 @Transactional( readOnly = true )
@@ -7,11 +7,9 @@ class ScreenshotService {
     def grailsApplication
 
     def getScreenshot( def params) {
-        def localScreenshotDir = grailsApplication.config.screenshot.localScreenshotDir
+        File file = File.createTempFile("tmp-omar-ui-screenshot",".jpg", new File('/tmp'))
 
-
-        // Expand this out to include name of video
-        params.filePath = "${localScreenshotDir}/${params.timestamp}.jpg"
+        params.filePath = file
 
         def cmdScreenshot = [
             'ffmpeg',
@@ -21,11 +19,15 @@ class ScreenshotService {
             '-i', params.videoPath,
             '-vframes', '1',
             '-q:v', '2',
-            "${localScreenshotDir}/${params.timestamp}.jpg"
+            "${file}"
         ]
+
         def proc = cmdScreenshot.execute()
-        proc.consumeProcessOutput()
-        proc.waitFor()
+        def outputStream = new StringBuffer()
+        proc.waitForProcessOutput(outputStream, System.err)
+
+        // deletes file when the virtual machine terminate
+        // file.deleteOnExit()
 
         [ params: params ]
     }

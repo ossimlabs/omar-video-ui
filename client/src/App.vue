@@ -71,7 +71,7 @@
     </v-toolbar>
 
     <!-- MAIN CONTENT AREA -->
-    <v-content>
+    <v-content app>
       <v-container fill-height>
         <v-layout justify-center align-center>
           <v-flex shrink>
@@ -91,7 +91,7 @@
 
 <script>
 // Components
-import VideoPlayer from '@/pages/VideoPlayer'
+import VideoPlayer from '@/components/VideoPlayer/VideoPlayer'
 
 // Libraries / Packages
 import axios from 'axios'
@@ -125,7 +125,6 @@ export default {
   computed: {},
   watch: {
     '$route' (to, from) {
-      console.log('route changed')
       // react to route changes...
     }
   },
@@ -140,7 +139,6 @@ export default {
 
       let urlParams = new URLSearchParams(window.location.search)
       let filter = urlParams.get('filter')
-
 
       // WFS Redirect
       // const proxy = 'http://localhost:8080/proxy'
@@ -171,8 +169,6 @@ export default {
           // Build final url and append to response keeping unified object intact
           res.data.features[0].properties.videoUrl = this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
           self.videoResp = this.videoMetaData = res.data
-
-          console.log('this.videoMetaData', this.videoMetaData)
         })
         .catch(error => {
           console.log(error)
