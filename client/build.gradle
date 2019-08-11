@@ -8,6 +8,10 @@ node {
     download = true
 }
 
+task setNpmRegistry(type: Exec) {
+    commandLine 'npm', 'config', 'set', 'registry=' + environment.get('NPM_REGISTRY')
+}
+
 task bootRun(dependsOn: 'start') {
     group = 'application'
     description = 'Run the client app (for use with gradle bootRun -parallel'
@@ -47,3 +51,5 @@ task e2e(type: YarnTask, dependsOn: 'yarn') {
     description = 'Run the e2e tests'
     args = ['run', 'e2e']
 }
+
+yarn.dependsOn(setNpmRegistry)
