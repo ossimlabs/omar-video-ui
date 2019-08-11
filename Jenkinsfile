@@ -37,7 +37,10 @@ node( "${ BUILD_NODE }" ) {
     }
 
     stage ( "Assemble" ) {
-        sh "gradle assembleServerAndCLient -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+        sh """
+            echo "registry = ${NPM_REGISTRY}" >> .npmrc
+            gradle assembleServerAndCLient -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }
+        """
         //archiveArtifacts "apps/*/build/libs/*.jar"
     }
 
