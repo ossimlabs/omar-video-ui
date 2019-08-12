@@ -35,14 +35,6 @@
           Meta Data
         </v-subheader>
 
-        <!-- Will not work until videoDataSet is array -->
-        <!--<v-data-iterator
-          :items="videoResp.videoDataSet"
-          row
-          wrap
-        >
-        </v-data-iterator>-->
-
         <v-list-tile ripple v-for="(entry, key) in videoMetaData.features[0].properties" :key="key">
           <v-list-tile-title>
             {{ key }} :
@@ -110,7 +102,6 @@ export default {
     return {
       loading: false,
       drawer: null,
-      videoResp: {},
       videoMetaData: null,
       videoUrl: null,
       videoName: null,
@@ -135,13 +126,10 @@ export default {
   },
   methods: {
     fetchData: function () {
-      // needed because of axios scope
-      let self = this
       this.loading = true
 
       // grab the query parameters to get the search filter
       // Value used for http querystring to WFS
-
       let urlParams = new URLSearchParams(window.location.search)
       let filter = urlParams.get('filter')
 
@@ -172,7 +160,7 @@ export default {
 
           // Build final url and append to response keeping unified object intact
           res.data.features[0].properties.videoUrl = this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
-          self.videoResp = this.videoMetaData = res.data
+          this.videoMetaData = res.data
         })
         .catch(error => {
           console.log('error', error)

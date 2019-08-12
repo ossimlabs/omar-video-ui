@@ -6,7 +6,6 @@
           :video-url="videoUrl"
           :video-time="videoTime"
         >
-
         </video-tools>
 
         <div class="video-area">
