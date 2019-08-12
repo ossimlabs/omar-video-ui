@@ -1,15 +1,15 @@
 package omar.video.ui
-import grails.converters.JSON
-import grails.transaction.Transactional
 
-@Transactional
+
+import grails.converters.JSON
+
+
 class RestApiController {
 
-    def RestApiService
+    def restApiService
 
-    def index() {
-        def model = restApiService.serviceMethod( params )
-        render(model: [ tlvParams: model ], view: "/index.gsp")
 
+    def index() {	
+	render restApiService.serviceMethod() as JSON
     }
 }
