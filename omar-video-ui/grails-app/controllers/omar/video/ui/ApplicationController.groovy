@@ -37,11 +37,6 @@ class ApplicationController implements PluginManagerAware {
         params.remove( 'format' )
 
         def queryString = params.collect { key, value -> "${ key }=${ value }" }.join( "&" )
-//        redirect( url: "/?${ queryString }" )
-//		def model = restApiService.serviceMethod( params )
-		def params = 'things'
-
-
-		render(model: [ params: params ], view: "/index.gsp")
+        redirect( url: "/?${ queryString }" )
     }
 }

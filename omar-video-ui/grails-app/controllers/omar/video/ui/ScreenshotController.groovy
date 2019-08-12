@@ -10,6 +10,5 @@ class ScreenshotController {
     def index() {
         def screenshotDetails = screenshotService.getScreenshot(params)
         render contentType: 'image/jpeg', file: params.filePath
-
     }
 }

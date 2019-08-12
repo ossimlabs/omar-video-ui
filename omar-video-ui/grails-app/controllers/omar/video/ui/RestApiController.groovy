@@ -8,7 +8,6 @@ class RestApiController {
 
     def restApiService
 
-
     def index() {	
 	render restApiService.serviceMethod() as JSON
     }

@@ -14,8 +14,6 @@ class RestApiService {
 	def map = [
 		securityClassification: config.securityClassification
 	]
-
-
         return map
     }
 }

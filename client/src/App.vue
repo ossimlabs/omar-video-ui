@@ -1,11 +1,8 @@
 <template>
   <v-app id="inspire" dark>
-
-<!--    <banner></banner>-->
-
     <!-- DRAWER -->
     <v-navigation-drawer v-model="drawer" fixed clipped app >
-      <v-container >
+      <v-container class="mt-3">
         <v-layout>
           <v-flex xs12>
             <v-btn
@@ -59,7 +56,11 @@
     </v-navigation-drawer>
 
     <!-- HEADER -->
-    <v-toolbar color="#8a9196" dense fixed clipped-left app>
+    <!-- Banner -->
+    <Banner></Banner>
+
+    <!-- Top Toolbar -->
+    <v-toolbar color="#8a9196" class="mt-4" dense fixed clipped-left app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <img
         src="./assets/images/o2-logo.png"
@@ -79,8 +80,8 @@
         <v-layout justify-center align-center>
           <v-flex shrink>
             <video-player
-            :videoUrl="videoUrl"
-            :videoName="videoName"
+              :videoUrl="videoUrl"
+              :videoName="videoName"
             >
 
             </video-player>
@@ -95,6 +96,7 @@
 <script>
 // Components
 import VideoPlayer from '@/components/VideoPlayer/VideoPlayer'
+import Banner from '@/components/Banner/Banner'
 
 // Libraries / Packages
 import axios from 'axios'
@@ -103,7 +105,7 @@ import qs from 'qs'
 export default {
   name: 'App',
   props: {},
-  components: {VideoPlayer},
+  components: {Banner, VideoPlayer},
   data () {
     return {
       loading: false,
@@ -117,25 +119,11 @@ export default {
         { icon: 'fa-history', text: 'History' },
         { icon: 'fa-save', text: 'Saved' },
         { icon: 'fa-share', text: 'Shared' }
-      ],
-      serverURL: process.env.SERVER_URL
+      ]
     }
   },
   created () {
     this.fetchData()
-
-    console.log(this.$data.serverURL)
-    axios.get(`${this.$data.serverURL}/api`)
-      .then(res => {
-        console.log('res', res)
-      })
-    fetch(`${this.$data.serverURL}/api`)
-      .then(response => response.json())
-      .then(json => {
-        this.serverInfo = json
-      })
-
-    console.log('grailsApplication.config thing', this.serverInfo)
   },
   destroyed () {},
   mounted () {},
@@ -158,7 +146,6 @@ export default {
       let filter = urlParams.get('filter')
 
       // WFS Redirect
-      // const proxy = 'http://localhost:8080/proxy'
       const wfsUrl = 'https://omar-dev.ossim.io/omar-wfs/wfs?'
       const wfsParams = {
         service: 'WFS',

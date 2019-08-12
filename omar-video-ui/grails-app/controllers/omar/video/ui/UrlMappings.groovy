@@ -6,7 +6,6 @@ class UrlMappings {
     static mappings = {
 
         '/screenshot'(controller: 'screenshot', action:'index')
-        '/api'(controller: 'restapicontroller', action: 'index')
 
         // Modified for VUE Front end in PROD
         println 'Environment: ' + Environment.current
