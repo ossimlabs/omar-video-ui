@@ -5,11 +5,11 @@ import grails.util.Environment
 class UrlMappings {
     static mappings = {
 
-//        '/screenshot'(controller: 'screenshot', action:'takeScreenshot', method:'GET')
         '/screenshot'(controller: 'screenshot', action:'index')
+        '/api'(controller: 'restapicontroller', action: 'index')
 
         // Modified for VUE Front end in PROD
-        println 'Environment' + Environment.current
+        println 'Environment: ' + Environment.current
         if ( Environment.current == Environment.PRODUCTION ) {
             '/'(uri: '/index.html')
         } else {

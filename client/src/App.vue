@@ -1,5 +1,8 @@
 <template>
   <v-app id="inspire" dark>
+
+<!--    <banner></banner>-->
+
     <!-- DRAWER -->
     <v-navigation-drawer v-model="drawer" fixed clipped app >
       <v-container >
@@ -114,11 +117,25 @@ export default {
         { icon: 'fa-history', text: 'History' },
         { icon: 'fa-save', text: 'Saved' },
         { icon: 'fa-share', text: 'Shared' }
-      ]
+      ],
+      serverURL: process.env.SERVER_URL
     }
   },
   created () {
     this.fetchData()
+
+    console.log(this.$data.serverURL)
+    axios.get(`${this.$data.serverURL}/api`)
+      .then(res => {
+        console.log('res', res)
+      })
+    fetch(`${this.$data.serverURL}/api`)
+      .then(response => response.json())
+      .then(json => {
+        this.serverInfo = json
+      })
+
+    console.log('grailsApplication.config thing', this.serverInfo)
   },
   destroyed () {},
   mounted () {},
@@ -171,7 +188,7 @@ export default {
           self.videoResp = this.videoMetaData = res.data
         })
         .catch(error => {
-          console.log(error)
+          console.log('error', error)
         })
     }
   }
