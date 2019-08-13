@@ -39,6 +39,7 @@ node( "${ BUILD_NODE }" ) {
     stage ( "Assemble" ) {
         sh """
             echo "registry = ${NPM_REGISTRY}" >> .npmrc
+            cp .npmrc ~/.npmrc # Sometimes the per-project one doesn't get picked up
             gradle assembleServerAndCLient -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }
         """
         //archiveArtifacts "apps/*/build/libs/*.jar"
