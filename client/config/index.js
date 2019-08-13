@@ -7,6 +7,10 @@ const path = require('path')
 module.exports = {
   dev: {
 
+    devServer: {
+      proxy: 'http:localhost:3000'
+    },
+
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -18,7 +22,7 @@ module.exports = {
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
-    poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
+    poll: true, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and

@@ -2,7 +2,7 @@
   <v-app id="inspire" dark>
     <!-- DRAWER -->
     <v-navigation-drawer v-model="drawer" fixed clipped app >
-      <v-container >
+      <v-container class="mt-3">
         <v-layout>
           <v-flex xs12>
             <v-btn
@@ -35,14 +35,6 @@
           Meta Data
         </v-subheader>
 
-        <!-- Will not work until videoDataSet is array -->
-        <!--<v-data-iterator
-          :items="videoResp.videoDataSet"
-          row
-          wrap
-        >
-        </v-data-iterator>-->
-
         <v-list-tile ripple v-for="(entry, key) in videoMetaData.features[0].properties" :key="key">
           <v-list-tile-title>
             {{ key }} :
@@ -56,7 +48,11 @@
     </v-navigation-drawer>
 
     <!-- HEADER -->
-    <v-toolbar color="#8a9196" dense fixed clipped-left app>
+    <!-- Banner -->
+    <Banner></Banner>
+
+    <!-- Top Toolbar -->
+    <v-toolbar color="#8a9196" class="mt-4" dense fixed clipped-left app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <img
         src="./assets/images/o2-logo.png"
@@ -76,8 +72,8 @@
         <v-layout justify-center align-center>
           <v-flex shrink>
             <video-player
-            :videoUrl="videoUrl"
-            :videoName="videoName"
+              :videoUrl="videoUrl"
+              :videoName="videoName"
             >
 
             </video-player>
@@ -92,6 +88,7 @@
 <script>
 // Components
 import VideoPlayer from '@/components/VideoPlayer/VideoPlayer'
+import Banner from '@/components/Banner/Banner'
 
 // Libraries / Packages
 import axios from 'axios'
@@ -100,12 +97,11 @@ import qs from 'qs'
 export default {
   name: 'App',
   props: {},
-  components: {VideoPlayer},
+  components: {Banner, VideoPlayer},
   data () {
     return {
       loading: false,
       drawer: null,
-      videoResp: {},
       videoMetaData: null,
       videoUrl: null,
       videoName: null,
@@ -130,18 +126,14 @@ export default {
   },
   methods: {
     fetchData: function () {
-      // needed because of axios scope
-      let self = this
       this.loading = true
 
       // grab the query parameters to get the search filter
       // Value used for http querystring to WFS
-
       let urlParams = new URLSearchParams(window.location.search)
       let filter = urlParams.get('filter')
 
       // WFS Redirect
-      // const proxy = 'http://localhost:8080/proxy'
       const wfsUrl = 'https://omar-dev.ossim.io/omar-wfs/wfs?'
       const wfsParams = {
         service: 'WFS',
@@ -168,10 +160,10 @@ export default {
 
           // Build final url and append to response keeping unified object intact
           res.data.features[0].properties.videoUrl = this.videoUrl = 'https://omar-dev.ossim.io/videos/' + videoNameMp4
-          self.videoResp = this.videoMetaData = res.data
+          this.videoMetaData = res.data
         })
         .catch(error => {
-          console.log(error)
+          console.log('error', error)
         })
     }
   }
