@@ -49,7 +49,7 @@
 
     <!-- HEADER -->
     <!-- Banner -->
-    <Banner></Banner>
+    <security-banner :security-classification=globalConfig.securityClassification></security-banner>
 
     <!-- Top Toolbar -->
     <v-toolbar color="#8a9196" class="mt-4" dense fixed clipped-left app>
@@ -63,7 +63,17 @@
       <v-toolbar-title class="align-self-end mb-1">
         <span class="title align-baseline">Video</span>
         <span class="font-italic caption ml-2"> The youtube of imagery</span>
+
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <span v-if="globalConfig.userName">
+        {{ globalConfig.userName ? globalConfig.userName : 'No PKI' }}
+      </span>
+
+        <v-btn icon>
+          <v-icon>fa-user</v-icon>
+        </v-btn>
+
     </v-toolbar>
 
     <!-- MAIN CONTENT AREA -->
@@ -75,7 +85,6 @@
               :videoUrl="videoUrl"
               :videoName="videoName"
             >
-
             </video-player>
           <!-- <router-view></router-view>-->
           </v-flex>
@@ -88,7 +97,7 @@
 <script>
 // Components
 import VideoPlayer from '@/components/VideoPlayer/VideoPlayer'
-import Banner from '@/components/Banner/Banner'
+import SecurityBanner from "@/components/SecurityBanner/SecurityBanner";
 
 // Libraries / Packages
 import axios from 'axios'
@@ -97,9 +106,10 @@ import qs from 'qs'
 export default {
   name: 'App',
   props: {},
-  components: {Banner, VideoPlayer},
+  components: { SecurityBanner, VideoPlayer },
   data () {
     return {
+      globalConfig: {},
       loading: false,
       drawer: null,
       videoMetaData: null,
@@ -114,6 +124,7 @@ export default {
     }
   },
   created () {
+    this.fetchConfig()
     this.fetchData()
   },
   destroyed () {},
@@ -125,6 +136,28 @@ export default {
     }
   },
   methods: {
+    fetchConfig: function () {
+      let headers = ''
+      axios.get(`${process.env.SERVER_URL}/restApi`)
+        .then(res => {
+          if (res.request.withCredentials){
+            console.log('has creds!')
+          }
+          this.globalConfig = res.data
+          console.log('res', res)
+        })
+      // let contentType = ''
+      // fetch(`${process.env.SERVER_URL}/restApi`)
+      //   .then((res) => {
+      //     contentType = res.headers.get();
+      //     return res.json()
+      //   })
+      //   .then(globalConfig => {
+      //     this.globalConfig = globalConfig
+      //     console.log('this.globalConfig', this.globalConfig)
+      //     console.log('contentType', contentType)
+      //   })
+    },
     fetchData: function () {
       this.loading = true
 
