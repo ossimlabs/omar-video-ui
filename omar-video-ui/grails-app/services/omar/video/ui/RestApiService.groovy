@@ -13,6 +13,7 @@ class RestApiService {
 	def userInfo = grailsApplication.config.userInfo
 	def requestHeaderUserName = userInfo.requestHeaderUserName
 	def userName = request.getHeader( requestHeaderUserName ) ?: userInfo.requestHeaderUserNameDefault
+	    println userName
 //    def testHeader = request.getHeader("User-Agent")
 
         def map = [
