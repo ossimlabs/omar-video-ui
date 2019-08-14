@@ -137,7 +137,9 @@ export default {
   },
   methods: {
     fetchConfig: function () {
-      let headers = ''
+      console.log('url', location.hostname)
+      console.log('${process.env.SERVER_URL}', process.env.SERVER_URL)
+
       axios.get(`${process.env.SERVER_URL}/restApi`)
         .then(res => {
           if (res.request.withCredentials){
