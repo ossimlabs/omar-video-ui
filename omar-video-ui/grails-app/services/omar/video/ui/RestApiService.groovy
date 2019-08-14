@@ -19,8 +19,7 @@ class RestApiService {
 		securityClassification: config.securityClassification,
         userInfo: userInfo,
         userName: requestHeaderUserName,
-        user: 'Your Face'
-//        testHeader: testHeader
+        user: 'Your username is very long'
 	]
         return map
     }

@@ -1,5 +1,5 @@
 <template>
-  <v-system-bar class="d-inline-flex"
+  <v-system-bar fixed class="d-inline-flex"
     v-if="securityClassification"
     :style="{ backgroundColor: securityClassification.backgroundColor }"
   >

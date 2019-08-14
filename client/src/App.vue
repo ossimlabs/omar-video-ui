@@ -63,8 +63,17 @@
       <v-toolbar-title class="align-self-end mb-1">
         <span class="title align-baseline">Video</span>
         <span class="font-italic caption ml-2"> The youtube of imagery</span>
-        <span>config: {{ globalConfig.user }}</span>
+
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <span v-if="globalConfig.userName">
+        {{ globalConfig.userName ? globalConfig.userName : 'No PKI' }}
+      </span>
+
+        <v-btn icon>
+          <v-icon>fa-user</v-icon>
+        </v-btn>
+
     </v-toolbar>
 
     <!-- MAIN CONTENT AREA -->
@@ -76,7 +85,6 @@
               :videoUrl="videoUrl"
               :videoName="videoName"
             >
-
             </video-player>
           <!-- <router-view></router-view>-->
           </v-flex>
@@ -129,12 +137,26 @@ export default {
   },
   methods: {
     fetchConfig: function () {
-      fetch(`${process.env.SERVER_URL}/restApi`)
-        .then(res => res.json())
-        .then(globalConfig => {
-          this.globalConfig = globalConfig
-          console.log('this.globalConfig', this.globalConfig)
+      let headers = ''
+      axios.get(`${process.env.SERVER_URL}/restApi`)
+        .then(res => {
+          if (res.request.withCredentials){
+            console.log('has creds!')
+          }
+          this.globalConfig = res.data
+          console.log('res', res)
         })
+      // let contentType = ''
+      // fetch(`${process.env.SERVER_URL}/restApi`)
+      //   .then((res) => {
+      //     contentType = res.headers.get();
+      //     return res.json()
+      //   })
+      //   .then(globalConfig => {
+      //     this.globalConfig = globalConfig
+      //     console.log('this.globalConfig', this.globalConfig)
+      //     console.log('contentType', contentType)
+      //   })
     },
     fetchData: function () {
       this.loading = true
