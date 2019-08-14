@@ -8,17 +8,17 @@ class RestApiService {
 
     def grailsApplication
 
-    def serviceMethod() {
+    def serviceMethod( params, reqiest ) {
 	def config = grailsApplication.config
-    def userInfo = grailsApplication.config.userInfo
-    def requestHeaderUserName = userInfo.requestHeaderUserName
-//    def userName = request.getHeader( requestHeaderUserName ) ?: userInfo.requestHeaderUserNameDefault
+	def userInfo = grailsApplication.config.userInfo
+	def requestHeaderUserName = userInfo.requestHeaderUserName
+	def userName = request.getHeader( requestHeaderUserName ) ?: userInfo.requestHeaderUserNameDefault
 //    def testHeader = request.getHeader("User-Agent")
 
         def map = [
 		securityClassification: config.securityClassification,
         userInfo: userInfo,
-        userName: requestHeaderUserName,
+        userName: userName,
         user: 'Your username is very long'
 	]
         return map
