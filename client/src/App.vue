@@ -137,7 +137,7 @@ export default {
   },
   methods: {
     fetchConfig: function () {
-      const pkiEndpoint = `https://${location.hostname}/omar-video-ui`
+      const pkiEndpoint = `https://pki-${location.hostname}`
 
       console.log('url', location.hostname)
       console.log('${process.env.SERVER_URL}', process.env.SERVER_URL)
