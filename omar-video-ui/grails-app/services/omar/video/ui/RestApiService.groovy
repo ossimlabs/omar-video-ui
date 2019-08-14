@@ -8,7 +8,7 @@ class RestApiService {
 
     def grailsApplication
 
-    def serviceMethod( params, reqiest ) {
+    def serviceMethod( params, request ) {
 	def config = grailsApplication.config
 	def userInfo = grailsApplication.config.userInfo
 	def requestHeaderUserName = userInfo.requestHeaderUserName
