@@ -49,7 +49,7 @@
 
     <!-- HEADER -->
     <!-- Banner -->
-    <Banner></Banner>
+    <security-banner :security-classification=globalConfig.securityClassification></security-banner>
 
     <!-- Top Toolbar -->
     <v-toolbar color="#8a9196" class="mt-4" dense fixed clipped-left app>
@@ -63,6 +63,7 @@
       <v-toolbar-title class="align-self-end mb-1">
         <span class="title align-baseline">Video</span>
         <span class="font-italic caption ml-2"> The youtube of imagery</span>
+        <span>config: {{ globalConfig.user }}</span>
       </v-toolbar-title>
     </v-toolbar>
 
@@ -88,7 +89,7 @@
 <script>
 // Components
 import VideoPlayer from '@/components/VideoPlayer/VideoPlayer'
-import Banner from '@/components/Banner/Banner'
+import SecurityBanner from "@/components/SecurityBanner/SecurityBanner";
 
 // Libraries / Packages
 import axios from 'axios'
@@ -97,9 +98,10 @@ import qs from 'qs'
 export default {
   name: 'App',
   props: {},
-  components: {Banner, VideoPlayer},
+  components: { SecurityBanner, VideoPlayer },
   data () {
     return {
+      globalConfig: {},
       loading: false,
       drawer: null,
       videoMetaData: null,
@@ -114,6 +116,7 @@ export default {
     }
   },
   created () {
+    this.fetchConfig()
     this.fetchData()
   },
   destroyed () {},
@@ -125,6 +128,14 @@ export default {
     }
   },
   methods: {
+    fetchConfig: function () {
+      fetch(`${process.env.SERVER_URL}/restApi`)
+        .then(res => res.json())
+        .then(globalConfig => {
+          this.globalConfig = globalConfig
+          console.log('this.globalConfig', this.globalConfig)
+        })
+    },
     fetchData: function () {
       this.loading = true
 
