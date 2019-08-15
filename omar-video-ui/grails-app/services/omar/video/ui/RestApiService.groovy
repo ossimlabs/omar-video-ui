@@ -9,19 +9,32 @@ class RestApiService {
     def grailsApplication
 
     def serviceMethod( params, request ) {
-	def config = grailsApplication.config
-	def userInfo = grailsApplication.config.userInfo
-	def requestHeaderUserName = userInfo.requestHeaderUserName
-	def userName = request.getHeader( requestHeaderUserName ) ?: userInfo.requestHeaderUserNameDefault
-	    println userName
-//    def testHeader = request.getHeader("User-Agent")
+        // Get Banner things
+        def securityClassification = grailsApplication.config.securityClassification
+        def config = grailsApplication.config
+        def env = grailsApplication.config.'grails.env'
+        def userName, userInfo, defaultName
+
+        if (env == 'development') {
+            println 'DEVELOPMENT'
+            userName = grailsApplication.config.user.name
+        } else {
+            // Get PKI things
+            println 'PRODUCTION'
+            userInfo = grailsApplication.config.userInfo
+            def requestHeaderUserName = userInfo.requestHeaderUserName
+            defaultName = userInfo.requestHeaderUserNameDefault
+            userName = request.getHeader( requestHeaderUserName ) ?: userInfo.requestHeaderUserNameDefault
+        }
+
 
         def map = [
-		securityClassification: config.securityClassification,
-        userInfo: userInfo,
-        userName: userName,
-        user: 'Your username is very long'
-	]
-        return map
-    }
+            securityClassification: securityClassification,
+            userInfo: userInfo,
+            userName: userName,
+            config: config,
+            env: env
+        ]
+            return map
+        }
 }

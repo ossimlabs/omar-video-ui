@@ -137,16 +137,17 @@ export default {
   },
   methods: {
     fetchConfig: function () {
-      const pkiEndpoint = `https://${location.hostname}/omar-video-ui/restApi`
+      let pkiEndpoint = `https://${location.hostname}/omar-video-ui/restApi`
 
-      console.log('url', location.hostname)
-      console.log('${process.env.SERVER_URL}', process.env.SERVER_URL)
+      if (process.env.NODE_ENV === 'development') {
+        pkiEndpoint = `${process.env.SERVER_URL}/restApi`
+      }
+
       console.log('pkiEndpoint', pkiEndpoint)
-
 
       axios.get(pkiEndpoint)
         .then(res => {
-          if (res.request.withCredentials){
+          if (res.request.withCredentials) {
             console.log('has creds!')
           }
           this.globalConfig = res.data
