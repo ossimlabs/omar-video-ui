@@ -137,33 +137,14 @@ export default {
   },
   methods: {
     fetchConfig: function () {
-      let pkiEndpoint = `https://${location.hostname}/omar-video-ui/restApi`
+      let apiEndpoint = (process.env.NODE_ENV === 'development')
+        ? `${process.env.SERVER_URL}/restApi`  // If on dev
+        : `https://${location.hostname}/omar-video-ui/restApi`;  // If on prod
 
-      if (process.env.NODE_ENV === 'development') {
-        pkiEndpoint = `${process.env.SERVER_URL}/restApi`
-      }
-
-      console.log('pkiEndpoint', pkiEndpoint)
-
-      axios.get(pkiEndpoint)
+      axios.get(apiEndpoint)
         .then(res => {
-          if (res.request.withCredentials) {
-            console.log('has creds!')
-          }
           this.globalConfig = res.data
-          console.log('res', res)
         })
-      // let contentType = ''
-      // fetch(`${process.env.SERVER_URL}/restApi`)
-      //   .then((res) => {
-      //     contentType = res.headers.get();
-      //     return res.json()
-      //   })
-      //   .then(globalConfig => {
-      //     this.globalConfig = globalConfig
-      //     console.log('this.globalConfig', this.globalConfig)
-      //     console.log('contentType', contentType)
-      //   })
     },
     fetchData: function () {
       this.loading = true

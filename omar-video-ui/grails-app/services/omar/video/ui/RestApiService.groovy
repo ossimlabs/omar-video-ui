@@ -9,21 +9,21 @@ class RestApiService {
     def grailsApplication
 
     def serviceMethod( params, request ) {
+        def userName, userInfo
+
         // Get Banner things
         def securityClassification = grailsApplication.config.securityClassification
         def config = grailsApplication.config
+
+        // grails.env is in dotnotation on the object
         def env = grailsApplication.config.'grails.env'
-        def userName, userInfo, defaultName
 
         if (env == 'development') {
-            println 'DEVELOPMENT'
             userName = grailsApplication.config.user.name
         } else {
             // Get PKI things
-            println 'PRODUCTION'
             userInfo = grailsApplication.config.userInfo
             def requestHeaderUserName = userInfo.requestHeaderUserName
-            defaultName = userInfo.requestHeaderUserNameDefault
             userName = request.getHeader( requestHeaderUserName ) ?: userInfo.requestHeaderUserNameDefault
         }
 
@@ -33,7 +33,6 @@ class RestApiService {
             userInfo: userInfo,
             userName: userName,
             config: config,
-            env: env
         ]
             return map
         }
