@@ -110,13 +110,7 @@ export default {
       this.showLinks = !this.$data.showLinks
     }
   },
-  created: function () {
-    fetch(`${this.$data.serverURL}/application`)
-      .then(response => response.json())
-      .then(json => {
-        this.serverInfo = json
-      })
-  }
+  created: function () {}
 }
 </script>
 

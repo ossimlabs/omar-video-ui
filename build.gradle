@@ -4,6 +4,7 @@ task copyClientResources(dependsOn: ':client:build', type: Copy) {
     from "${project(':client').projectDir}/dist"
     into "${project(':omar-video-ui').buildDir}/resources/main/public"
 }
+
 task assembleServerAndClient(type: Copy, dependsOn: ['copyClientResources', ':omar-video-ui:assemble']) {
     group = 'build'
     description = 'Build combined server & client JAR/WAR'
@@ -13,4 +14,5 @@ task assembleServerAndClient(type: Copy, dependsOn: ['copyClientResources', ':om
         logger.quiet "JAR/WAR generated at ${rootProject.buildDir}. It combines the server and client projects."
     }
 }
+
 task(":omar-video-ui:assemble").mustRunAfter(copyClientResources)
