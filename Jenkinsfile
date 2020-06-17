@@ -41,7 +41,7 @@ node( "${ BUILD_NODE }" ) {
             echo "registry = ${NPM_REGISTRY}" >> .npmrc
             cp .npmrc ~/.npmrc # Sometimes the per-project one doesn't get picked up
             export CHROMEDRIVER_SKIP_DOWNLOAD=true
-            gradle assembleServerAndCLient -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }
+            gradle assembleServerAndCLient -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
         """
         //archiveArtifacts "apps/*/build/libs/*.jar"
     }
@@ -54,7 +54,7 @@ node( "${ BUILD_NODE }" ) {
             usernameVariable: 'DOCKER_REGISTRY_USERNAME'
         ]]) {
             // Run all tasks on the app. This includes pushing to OpenShift and S3.
-            sh "gradle pushDockerImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+            sh "gradle pushDockerImage -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}"
         }
     }
     try {
@@ -66,7 +66,7 @@ node( "${ BUILD_NODE }" ) {
                 passwordVariable: 'OPENSHIFT_PASSWORD'
             ]]) {
                 // Run all tasks on the app. This includes pushing to OpenShift and S3.
-                sh "gradle openshiftTagImage -PossimMavenProxy=${ OSSIM_MAVEN_PROXY }"
+                sh "gradle openshiftTagImage -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}"
             }
         }
 
