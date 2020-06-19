@@ -14,7 +14,30 @@ properties([
         projectUrlStr: 'https://github.com/ossimlabs/omar-video-ui'
     ]
 ])
-
+podTemplate(
+  containers: [
+    containerTemplate(
+      name: 'docker',
+      image: 'docker:19.03.8',
+      ttyEnabled: true,
+      command: 'cat',
+      privileged: true
+    ),
+    containerTemplate(
+      image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/omar-builder:latest",
+      name: 'builder',
+      command: 'cat',
+      ttyEnabled: true
+    )
+  ],
+  volumes: [
+    hostPathVolume(
+      hostPath: '/var/run/docker.sock',
+      mountPath: '/var/run/docker.sock'
+    ),
+  ]
+)
+{
 node( "${ BUILD_NODE }" ) {
 
     stage("Checkout branch $BRANCH_NAME" ) {
@@ -37,39 +60,36 @@ node( "${ BUILD_NODE }" ) {
     }
 
     stage ( "Assemble" ) {
-        sh """
-            echo "registry = ${NPM_REGISTRY}" >> .npmrc
-            cp .npmrc ~/.npmrc # Sometimes the per-project one doesn't get picked up
-            export CHROMEDRIVER_SKIP_DOWNLOAD=true
-            gradle assembleServerAndCLient -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-        """
-        //archiveArtifacts "apps/*/build/libs/*.jar"
+        container('builder'){
+            sh """
+                echo "registry = ${NPM_REGISTRY}" >> .npmrc
+                cp .npmrc ~/.npmrc # Sometimes the per-project one doesn't get picked up
+                export CHROMEDRIVER_SKIP_DOWNLOAD=true
+                gradle assembleServerAndCLient -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
+            """
+            //archiveArtifacts "apps/*/build/libs/*.jar"
+        }
     }
 
-    stage ( "Publish Docker App" ) {
-        withCredentials([[
-            $class: 'UsernamePasswordMultiBinding',
-            credentialsId: 'dockerCredentials',
-            passwordVariable: 'DOCKER_REGISTRY_PASSWORD',
-            usernameVariable: 'DOCKER_REGISTRY_USERNAME'
-        ]]) {
-            // Run all tasks on the app. This includes pushing to OpenShift and S3.
-            sh "gradle pushDockerImage -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}"
+    stage('Docker build') {
+        container('docker') {
+            withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {  //TODO
+                sh """
+                docker build --build-arg BASE_IMAGE=ossim-runtime-alpine-minimal --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-mensa-app:${BRANCH_NAME} ./docker
+                """
+            }
+        }
+    }
+    stage('Docker push'){
+        container('docker') {
+            withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
+            sh """
+                docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-mensa-app:${BRANCH_NAME}
+            """
+            }
         }
     }
     try {
-        stage ( "OpenShift Tag Image" ) {
-            withCredentials([[
-                $class: 'UsernamePasswordMultiBinding',
-                credentialsId: 'openshiftCredentials',
-                usernameVariable: 'OPENSHIFT_USERNAME',
-                passwordVariable: 'OPENSHIFT_PASSWORD'
-            ]]) {
-                // Run all tasks on the app. This includes pushing to OpenShift and S3.
-                sh "gradle openshiftTagImage -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}"
-            }
-        }
-
         stage( "Clean Workspace" ) {
             if ( "${ CLEAN_WORKSPACE }" == "true" ) {
                 step([ $class: 'WsCleanup' ])
@@ -78,4 +98,5 @@ node( "${ BUILD_NODE }" ) {
     } catch (e) {
         echo e.toString()
     }
+}
 }
