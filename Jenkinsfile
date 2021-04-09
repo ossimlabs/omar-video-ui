@@ -1,81 +1,163 @@
 properties([
-    buildDiscarder( logRotator( numToKeepStr: '5' ) ),
-    disableConcurrentBuilds(),
     parameters([
-        string( name: 'BUILD_NODE', defaultValue: 'omar-build', description: 'The build node to run on' ),
-        booleanParam(name: 'CLEAN_WORKSPACE', defaultValue: true, description: 'Clean the workspace at the end of the run' )
+        string(name: 'PROJECT_URL', defaultValue: 'https://github.com/ossimlabs/omar-video-ui', description: 'The project github URL'),
+        string(name: 'DOCKER_REGISTRY_DOWNLOAD_URL', defaultValue: 'nexus-docker-private-group.ossim.io', description: 'Repository of docker images')
     ]),
     pipelineTriggers([
-            [ $class: "GitHubPushTrigger" ]
+        [$class: "GitHubPushTrigger"]
     ]),
-    [
-        $class: 'GithubProjectProperty',
-        displayName: '',
-        projectUrlStr: 'https://github.com/ossimlabs/omar-video-ui'
+    [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: '${PROJECT_URL}'],
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '20')),
+    disableConcurrentBuilds()
+    ])
+
+podTemplate(
+    containers: [
+        containerTemplate(
+            name: 'docker',
+            image: 'docker:19.03.11',
+            ttyEnabled: true,
+            command: 'cat',
+            privileged: true
+        ),
+        containerTemplate(
+            image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/omar-builder:jdk11",
+            name: 'builder',
+            command: 'cat',
+            ttyEnabled: true
+        ),
+        containerTemplate(
+            image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/alpine/helm:3.2.3",
+            name: 'helm',
+            command: 'cat',
+            ttyEnabled: true
+        ),
+        containerTemplate(
+            name: 'git',
+            image: 'alpine/git:latest',
+            ttyEnabled: true,
+            command: 'cat',
+            envVars: [
+                envVar(key: 'HOME', value: '/root')
+                ]
+        ),
+        containerTemplate(
+            name: 'cypress',
+            image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/cypress/included:4.9.0",
+            ttyEnabled: true,
+            command: 'cat',
+            privileged: true
+        )
+      ],
+    volumes: [
+        hostPathVolume(
+            hostPath: '/var/run/docker.sock',
+            mountPath: '/var/run/docker.sock'
+        ),
     ]
-])
+)
 
-node( "${ BUILD_NODE }" ) {
+{
+node(POD_LABEL){
+    stage("Checkout branch") {
+        APP_NAME = PROJECT_URL.tokenize('/').last()
+        scmVars = checkout(scm)
+        Date date = new Date()
+        String currentDate = date.format("YYYY-MM-dd-HH-mm-ss")
+        MASTER = "master"
+        GIT_BRANCH_NAME = scmVars.GIT_BRANCH
+        BRANCH_NAME = """${sh(returnStdout: true, script: "echo ${GIT_BRANCH_NAME} | awk -F'/' '{print \$2}'").trim()}"""
+        VERSION = """${sh(returnStdout: true, script: "cat chart/Chart.yaml | grep version: | awk -F'version:' '{print \$2}'").trim()}"""
+        GIT_TAG_NAME = APP_NAME + "-" + VERSION
+        ARTIFACT_NAME = "ArtifactName"
 
-    stage("Checkout branch $BRANCH_NAME" ) {
-        checkout( scm )
+            if (BRANCH_NAME == "${MASTER}") {
+                buildName "${VERSION}"
+                TAG_NAME = "${VERSION}"
+            }
+            else {
+                buildName "${BRANCH_NAME}-${currentDate}"
+                TAG_NAME = "${BRANCH_NAME}-${currentDate}"
+            }
+
     }
 
-    stage( "Load Variables" ) {
-        withCredentials([
-            string( credentialsId: 'o2-artifact-project', variable: 'o2ArtifactProject' )
-        ]) {
-            step ([
-                $class: "CopyArtifact",
+    stage("Load Variables") {
+        withCredentials([string(credentialsId: 'o2-artifact-project', variable: 'o2ArtifactProject')]) {
+            step ([$class: "CopyArtifact",
+                projectName: o2ArtifactProject,
                 filter: "common-variables.groovy",
-                flatten: true,
-                projectName: o2ArtifactProject
-            ])
+                flatten: true])
         }
-
         load "common-variables.groovy"
+        DOCKER_IMAGE_PATH = "${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}/${APP_NAME}"
     }
 
-    stage ( "Assemble" ) {
-        sh """
-            echo "registry = ${NPM_REGISTRY}" >> .npmrc
-            cp .npmrc ~/.npmrc # Sometimes the per-project one doesn't get picked up
-            export CHROMEDRIVER_SKIP_DOWNLOAD=true
-            gradle assembleServerAndCLient -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-        """
-        //archiveArtifacts "apps/*/build/libs/*.jar"
-    }
-
-    stage ( "Publish Docker App" ) {
-        withCredentials([[
-            $class: 'UsernamePasswordMultiBinding',
-            credentialsId: 'dockerCredentials',
-            passwordVariable: 'DOCKER_REGISTRY_PASSWORD',
-            usernameVariable: 'DOCKER_REGISTRY_USERNAME'
-        ]]) {
-            // Run all tasks on the app. This includes pushing to OpenShift and S3.
-            sh "gradle pushDockerImage -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}"
+    stage('Build') {
+        container('builder') {
+            sh """
+                ./gradlew assemble
+            """
         }
     }
-    try {
-        stage ( "OpenShift Tag Image" ) {
-            withCredentials([[
-                $class: 'UsernamePasswordMultiBinding',
-                credentialsId: 'openshiftCredentials',
-                usernameVariable: 'OPENSHIFT_USERNAME',
-                passwordVariable: 'OPENSHIFT_PASSWORD'
-            ]]) {
-                // Run all tasks on the app. This includes pushing to OpenShift and S3.
-                sh "gradle openshiftTagImage -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}"
+
+    stage('Docker Build') {
+        container('docker') {
+            withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {
+                sh """
+                    docker build . -t ${DOCKER_IMAGE_PATH}:${TAG_NAME}
+                """
             }
         }
+    }
 
-        stage( "Clean Workspace" ) {
-            if ( "${ CLEAN_WORKSPACE }" == "true" ) {
-                step([ $class: 'WsCleanup' ])
+    stage('Docker Push') {
+        container('docker') {
+            withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}") {
+            sh """
+                docker push ${DOCKER_IMAGE_PATH}:${TAG_NAME}
+            """
             }
         }
-    } catch (e) {
-        echo e.toString()
     }
-}
+
+    stage('Package & Upload Chart'){
+        container('helm') {
+            sh """
+                mkdir packaged-chart
+                helm package -d packaged-chart chart
+            """
+        withCredentials([usernameColonPassword(credentialsId: 'helmCredentials', variable: 'HELM_CREDENTIALS')]) {
+            sh """
+                apk add curl
+                curl -u ${HELM_CREDENTIALS} ${HELM_UPLOAD_URL} --upload-file packaged-chart/*.tgz -v
+            """
+            }
+        }
+    }
+
+    stage('Tag Repo') {
+        when (BRANCH_NAME == MASTER) {
+            container('git') {
+                withCredentials([sshUserPrivateKey(
+                      credentialsId: env.GIT_SSH_CREDENTIALS_ID,
+                      keyFileVariable: 'SSH_KEY_FILE',
+                      passphraseVariable: '',
+                      usernameVariable: 'SSH_USERNAME')]) {
+                          sh """
+                              mkdir ~/.ssh
+                              echo -e "StrictHostKeyChecking=no\nIdentityFile ${SSH_KEY_FILE}" >> ~/.ssh/config
+                              git config user.email "radiantcibot@gmail.com"
+                              git config user.name "Jenkins"
+                              git tag -a "${GIT_TAG_NAME}" \
+                              -m "Generated by: ${env.JENKINS_URL}" \
+                              -m "Job: ${env.JOB_NAME}" \
+                              -m "Build: ${env.BUILD_NUMBER}"
+                              git push -v origin "${GIT_TAG_NAME}"
+                          """
+                        }
+                    }
+                }
+            }
+        }
+    }
